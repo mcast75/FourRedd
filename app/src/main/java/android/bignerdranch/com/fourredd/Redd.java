@@ -1,5 +1,6 @@
 package android.bignerdranch.com.fourredd;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
     UserLocalStore mUserLocalStore;
     TextView createThread;
     Forum forum;
+    Context mContext;
 
 
     @Override
@@ -54,6 +56,8 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
 
         mUserLocalStore = new UserLocalStore(this);
+
+        mContext = this;
 
         forum = null;
     }
@@ -122,7 +126,34 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         serverRequests.fetchForumInBackground(forum, new GetForumCallback() {
             @Override
             public void done(Forum returnedForum) {
-                startActivity(new Intent(Redd.this, HomeActivity.class));
+
+                TableLayout table = (TableLayout) findViewById(R.id.table);
+                int i = 0;
+                ArrayList<Thread> temp = returnedForum.getAllThreads();
+
+                for(i =0; i < temp.size(); i++){
+
+                    TableRow row = new TableRow(mContext);
+                    table.addView(row);
+                    LinearLayout ll = new LinearLayout(mContext);
+                    row.addView(ll);
+                    ll.setOrientation(LinearLayout.HORIZONTAL);
+
+                    TextView tvTitle = new TextView(mContext);
+                    tvTitle.setText(temp.get(i).title);
+                    TextView tvUser = new TextView(mContext);
+                    tvTitle.setText(temp.get(i).text);
+                    TextView tvText = new TextView(mContext);
+                    tvTitle.setText(temp.get(i).text);
+                    TextView tvNumLike = new TextView(mContext);
+                    tvTitle.setText(temp.get(i).like);
+
+                    ll.addView(tvTitle);
+                    ll.addView(tvUser);
+                    ll.addView(tvText);
+                    ll.addView(tvNumLike);
+
+                }
             }
 
 
