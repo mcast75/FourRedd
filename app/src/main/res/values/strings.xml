@@ -9,4 +9,5 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="title_activity_create_thread">createThread</string>
+    <string name="title_activity_comments">Comments</string>
 </resources>

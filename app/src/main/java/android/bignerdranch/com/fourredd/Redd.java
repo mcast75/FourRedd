@@ -1,13 +1,19 @@
 package android.bignerdranch.com.fourredd;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -32,7 +38,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
     Button bFour, bHome, bLogout;
     UserLocalStore mUserLocalStore;
-    TextView createThread;
+    TextView createThread, comments;
     Forum forum;
     Context mContext;
 
@@ -47,8 +53,9 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         bFour = (Button) findViewById(R.id.bFour2);
         bHome = (Button) findViewById(R.id.bHome2);
         createThread = (TextView) findViewById(R.id.createThread);
+        comments = (TextView) findViewById(R.id.comments);
 
-
+        //comments.setOnClickListener(this);
         bLogout.setOnClickListener(this);
         bFour.setOnClickListener(this);
         bHome.setOnClickListener(this);
@@ -117,6 +124,8 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                 startActivity(new Intent(this, CreateThread.class));
                 break;
 
+
+
         }
 
     }
@@ -137,21 +146,60 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                     table.addView(row);
                     LinearLayout ll = new LinearLayout(mContext);
                     row.addView(ll);
-                    ll.setOrientation(LinearLayout.HORIZONTAL);
+                    ll.setOrientation(LinearLayout.VERTICAL);
+                    ll.setPadding(0, 0, 0, 70);
 
+                    LinearLayout ll2 = new LinearLayout(mContext);
+                    ll.setPadding(0, 0, 0, 40);
+                    ll.addView(ll2);
                     TextView tvTitle = new TextView(mContext);
                     tvTitle.setText(temp.get(i).title);
-                    TextView tvUser = new TextView(mContext);
-                    tvTitle.setText(temp.get(i).text);
-                    TextView tvText = new TextView(mContext);
-                    tvTitle.setText(temp.get(i).text);
-                    TextView tvNumLike = new TextView(mContext);
-                    tvTitle.setText(temp.get(i).like);
+                    tvTitle.setTextColor(Color.BLACK);
+                    tvTitle.setTextSize(24);
+                    ll2.addView(tvTitle);
+                    TextView line = new TextView(mContext);
+                    line.setTextSize(2);
+                    line.setTextColor(Color.BLACK);
+                    line.setText("_____________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "______________________________________________________________________");
 
-                    ll.addView(tvTitle);
-                    ll.addView(tvUser);
-                    ll.addView(tvText);
-                    ll.addView(tvNumLike);
+
+
+
+                    LinearLayout ll3 = new LinearLayout(mContext);
+                    ll.addView(ll3);
+                    TextView space = new TextView(mContext);
+                    space.setText("      ");
+                    ll3.addView(space);
+                    TextView comments = new TextView(mContext);
+                    comments.setText("Comments");
+                    comments.setLinksClickable(true);
+                    comments.setTag("comments");
+                    comments.setId(R.id.comments);
+                    comments.setTextSize(20);
+                    comments.setTextColor(Color.BLUE);
+                    comments.setPaintFlags(comments.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                    ll3.addView(comments);
+
+                    TextView tvNumLike = new TextView(mContext);
+                    tvNumLike.setText("                               Likes: " + temp.get(i).like + "");
+                    tvNumLike.setTextSize(20);
+                    ll3.addView(tvNumLike);
+                    ll.addView(line);
+
+
+
+
+
 
                 }
             }

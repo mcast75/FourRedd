@@ -38,6 +38,10 @@
             android:name=".CreateThread"
             android:label="@string/title_activity_create_thread" >
         </activity>
+        <activity
+            android:name=".Comments"
+            android:label="@string/title_activity_comments" >
+        </activity>
     </application>
 
 </manifest>
