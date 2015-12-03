@@ -204,12 +204,6 @@ public class ServerRequests {
         protected Forum doInBackground(Void... voids) {
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
-            Thread tempThread = new Thread();
-
-            dataToSend.add(new BasicNameValuePair("user", tempThread.user));
-            dataToSend.add(new BasicNameValuePair("title", tempThread.title));
-            dataToSend.add(new BasicNameValuePair("text", tempThread.text));
-            dataToSend.add(new BasicNameValuePair("num_like", tempThread.like+""));
 
 
 
@@ -218,9 +212,9 @@ public class ServerRequests {
             HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
 
             HttpClient client = new DefaultHttpClient(httpRequestParams);
-            HttpPost post = new HttpPost(SERVER_ADDRESS + "FetchUserData.php");
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "FetchForumData.php");
 
-            Forum returnedForum = null;
+            Forum returnedForum = new Forum();
             try{
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
                 HttpResponse httpResponse = client.execute(post);
@@ -241,10 +235,21 @@ public class ServerRequests {
                 }else{
                     int i = 0;
                     for(i=0; i<jsonArray.length(); i++){
+                        Thread tempThread = new Thread();
+
 
                         JSONObject object = jsonArray.getJSONObject(i);
+                        tempThread.user = object.get("user").toString();
+                        tempThread.title = object.get("title").toString();
+                        tempThread.text = object.get("text").toString();
+                        tempThread.like = object.getInt("num_like");
+
+
+
+
+                        Log.d("ADebugTag", "AHHHHHHHH!!!!!!!!!!!!!!: \n" + tempThread.title);
                         returnedForum.addThread(tempThread);
-                        Log.d("ADebugTag", "FORUM!!!!!!!!!!!!!!: \n" + returnedForum);
+
 
 
 
