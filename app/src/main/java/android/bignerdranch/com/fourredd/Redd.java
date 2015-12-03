@@ -39,6 +39,8 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
     Forum forum;
     Context mContext;
     private View.OnClickListener mClickListener;
+    ArrayList<Thread> temp;
+    ThreadLocalStore mThreadLocalStore;
 
 
     @Override
@@ -58,6 +60,10 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         bFour.setOnClickListener(this);
         bHome.setOnClickListener(this);
         createThread.setOnClickListener(this);
+
+        mThreadLocalStore = new ThreadLocalStore(this);
+
+        temp = new ArrayList<Thread>();
 
         mClickListener = this;
 
@@ -125,7 +131,12 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
             default:
                 int id = v.getId();
-                Log.d("ADebugTag", "IDIDIDIDIDID!!!!!!!!!!!!!!: \n" + id);
+
+                mThreadLocalStore.storeThreadData(temp.get(id));
+
+                Log.d("ADebugTag", "CURRENT THREAD!!!!!!!!!!!!!!: \n" + mThreadLocalStore.getCurrentThread().title);
+
+
                 startActivity(new Intent(this, Comments.class));
                 break;
 
@@ -145,7 +156,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
                 TableLayout table = (TableLayout) findViewById(R.id.table);
                 int i = 0;
-                ArrayList<Thread> temp = returnedForum.getAllThreads();
+                temp = returnedForum.getAllThreads();
 
 
 
@@ -155,7 +166,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
                     TableRow row = new TableRow(mContext);
                     table.addView(row);
-                    row.setId(temp.get(i).id);
+                    row.setId(i);
                     row.setClickable(true);
                     Log.d("ADebugTag", "LOG ID!!!!!!!!!!!!!!: \n" + row.getId());
                     LinearLayout ll = new LinearLayout(mContext);
