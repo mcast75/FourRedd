@@ -125,6 +125,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
+            Log.d("ADEBUGTAG", "Start Map:  \n" + "Enters Location");
             double latitude = location.getLatitude();
             Log.d("ADEBUGTAG", "LATITUDE:  \n" + latitude);
             double longitude = location.getLongitude();

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -22,11 +23,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
@@ -41,6 +38,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
     TextView createThread, comments;
     Forum forum;
     Context mContext;
+    private View.OnClickListener mClickListener;
 
 
     @Override
@@ -61,6 +59,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         bHome.setOnClickListener(this);
         createThread.setOnClickListener(this);
 
+        mClickListener = this;
 
         mUserLocalStore = new UserLocalStore(this);
 
@@ -124,6 +123,14 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                 startActivity(new Intent(this, CreateThread.class));
                 break;
 
+            default:
+                int id = v.getId();
+                Log.d("ADebugTag", "IDIDIDIDIDID!!!!!!!!!!!!!!: \n" + id);
+                startActivity(new Intent(this, Comments.class));
+                break;
+
+
+
 
 
         }
@@ -140,12 +147,22 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                 int i = 0;
                 ArrayList<Thread> temp = returnedForum.getAllThreads();
 
+
+
                 for(i =0; i < temp.size(); i++){
+
+
 
                     TableRow row = new TableRow(mContext);
                     table.addView(row);
+                    row.setId(temp.get(i).id);
+                    row.setClickable(true);
+                    Log.d("ADebugTag", "LOG ID!!!!!!!!!!!!!!: \n" + row.getId());
                     LinearLayout ll = new LinearLayout(mContext);
                     row.addView(ll);
+                    row.setOnClickListener(Redd.this);
+
+
                     ll.setOrientation(LinearLayout.VERTICAL);
                     ll.setPadding(0, 0, 0, 70);
 

@@ -243,6 +243,7 @@ public class ServerRequests {
                         tempThread.title = object.get("title").toString();
                         tempThread.text = object.get("text").toString();
                         tempThread.like = object.getInt("num_like");
+                        tempThread.id = object.getInt("threadID");
 
 
 
@@ -291,6 +292,7 @@ public class ServerRequests {
             dataToSend.add(new BasicNameValuePair("title", mThread.title));
             dataToSend.add(new BasicNameValuePair("text", mThread.text));
             dataToSend.add(new BasicNameValuePair("like", mThread.like+""));
+
 
 
             HttpParams httpRequestParams = new BasicHttpParams();
