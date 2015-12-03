@@ -1,7 +1,10 @@
 package android.bignerdranch.com.fourredd;
 
+<<<<<<< HEAD
 import android.app.ActionBar;
 import android.content.Context;
+=======
+>>>>>>> parent of f6cbb66... Display database on Redd Page
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -40,7 +43,6 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
     UserLocalStore mUserLocalStore;
     TextView createThread, comments;
     Forum forum;
-    Context mContext;
 
 
     @Override
@@ -63,8 +65,6 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
 
         mUserLocalStore = new UserLocalStore(this);
-
-        mContext = this;
 
         forum = null;
     }
@@ -135,6 +135,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         serverRequests.fetchForumInBackground(forum, new GetForumCallback() {
             @Override
             public void done(Forum returnedForum) {
+<<<<<<< HEAD
 
                 TableLayout table = (TableLayout) findViewById(R.id.table);
                 int i = 0;
@@ -202,6 +203,9 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
 
                 }
+=======
+                startActivity(new Intent(Redd.this, HomeActivity.class));
+>>>>>>> parent of f6cbb66... Display database on Redd Page
             }
 
 
