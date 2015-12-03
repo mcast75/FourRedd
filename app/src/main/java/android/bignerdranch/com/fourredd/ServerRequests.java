@@ -17,6 +17,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -46,9 +47,22 @@ public class ServerRequests {
         new StoreUserDataAsyncTask(user, userCallback).execute();
     }
 
+    public void storeThreadDataInBackground(Thread thread, GetThreadCallback threadCallBack){
+        mProgressDialog.show();
+        new StoreThreadDataAsyncTask(thread, threadCallBack).execute();
+
+    }
+
+
     public void fetchUserDataInBackground(User user, GetUserCallback callback){
         mProgressDialog.show();
         new fetchUserDataAsyncTask(user, callback).execute();
+
+    }
+
+    public void fetchForumInBackground(Forum forum, GetForumCallback callback){
+        mProgressDialog.show();
+        new fetchForumDataAsyncTask(forum, callback).execute();
 
     }
 
@@ -172,6 +186,143 @@ public class ServerRequests {
             mProgressDialog.dismiss();
             userCallback.done(returnedUser);
             super.onPostExecute(returnedUser);
+        }
+    }
+
+
+
+    public class fetchForumDataAsyncTask extends AsyncTask<Void, Void, Forum> {
+        Forum mForum;
+        GetForumCallback mForumCallback;
+
+        public fetchForumDataAsyncTask(Forum forum, GetForumCallback forumCallback) {
+            this.mForum = forum;
+            this.mForumCallback = mForumCallback;
+        }
+
+        @Override
+        protected Forum doInBackground(Void... voids) {
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            Thread tempThread = new Thread();
+
+            dataToSend.add(new BasicNameValuePair("user", tempThread.user));
+            dataToSend.add(new BasicNameValuePair("title", tempThread.title));
+            dataToSend.add(new BasicNameValuePair("text", tempThread.text));
+            dataToSend.add(new BasicNameValuePair("num_like", tempThread.like+""));
+
+
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "FetchUserData.php");
+
+            Forum returnedForum = null;
+            try{
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+
+
+                Log.d("ADebugTag", "Value: \n" + result);
+                JSONArray jsonArray = new JSONArray(result);
+
+                if(jsonArray.length() ==0){
+                    returnedForum = null;
+                }else{
+                    int i = 0;
+                    for(i=0; i<jsonArray.length(); i++){
+
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        returnedForum.addThread(tempThread);
+                        Log.d("ADebugTag", "Value: \n" + returnedForum);
+
+
+
+                    }
+
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return returnedForum;
+        }
+
+        @Override
+        protected void onPostExecute(Forum returnedForum){
+
+            mProgressDialog.dismiss();
+            mForumCallback.done(returnedForum);
+            super.onPostExecute(returnedForum);
+        }
+    }
+
+
+
+
+    public class StoreThreadDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        Thread mThread;
+        GetThreadCallback threadCallback;
+        public StoreThreadDataAsyncTask(Thread thread, GetThreadCallback threadCallback){
+            this.mThread = thread;
+            this.threadCallback = threadCallback;
+        }
+
+        @Override
+        protected Void doInBackground(Void...params){
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("user", mThread.user));
+            dataToSend.add(new BasicNameValuePair("title", mThread.title));
+            dataToSend.add(new BasicNameValuePair("text", mThread.text));
+            dataToSend.add(new BasicNameValuePair("like", mThread.like+""));
+
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "NewThread.php");
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+
+
+                Log.d("ADebugTag", "Value: Thread!!!!!!!!!!!!!!!!!!!!!!! \n\n\n" + result);
+                JSONObject jsonObject = new JSONObject(result);
+
+                Log.d("Register", "ValueJSON: \n\n\n\n\n" + result);
+
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid){
+
+            mProgressDialog.dismiss();
+            threadCallback.done(null);
+            super.onPostExecute(aVoid);
         }
     }
 

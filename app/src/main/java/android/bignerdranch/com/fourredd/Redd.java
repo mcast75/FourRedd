@@ -3,15 +3,35 @@ package android.bignerdranch.com.fourredd;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Redd extends AppCompatActivity implements View.OnClickListener {
 
     Button bFour, bHome, bLogout;
     UserLocalStore mUserLocalStore;
+    TextView createThread;
 
 
     @Override
@@ -23,11 +43,13 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         bLogout = (Button) findViewById(R.id.bLogout2);
         bFour = (Button) findViewById(R.id.bFour2);
         bHome = (Button) findViewById(R.id.bHome2);
+        createThread = (TextView) findViewById(R.id.createThread);
 
 
         bLogout.setOnClickListener(this);
         bFour.setOnClickListener(this);
         bHome.setOnClickListener(this);
+        createThread.setOnClickListener(this);
 
 
         mUserLocalStore = new UserLocalStore(this);
@@ -55,6 +77,8 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -75,7 +99,22 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                 startActivity(new Intent(this, HomeActivity.class));
                 break;
 
+            case R.id.createThread:
+                startActivity(new Intent(this, CreateThread.class));
+                break;
+
         }
 
+    }
+
+    private void getForum(Forum forum){
+        ServerRequests serverRequests = new ServerRequests((this));
+        serverRequests.fetchForumDataAsyncTask(forum, new GetForumCallback() {
+            @Override
+            public void done(Forum returnedForum) {
+                startActivity(new Intent(Redd.this, Redd.class));
+            }
+
+        });
     }
 }
