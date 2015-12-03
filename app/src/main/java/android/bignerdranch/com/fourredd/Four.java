@@ -47,21 +47,21 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_map);
+        setContentView(R.layout.activity_four);
 
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 
-//        bLogout = (Button) findViewById(R.id.bLogout3);
-//        bHome = (Button) findViewById(R.id.bHome3);
-//        bRedd = (Button) findViewById(R.id.bRedd3);
-//
-//
-//        bLogout.setOnClickListener(this);
-//        bHome.setOnClickListener(this);
-//        bRedd.setOnClickListener(this);
+        //bLogout = (Button) findViewById(R.id.bLogout3);
+        bHome = (Button) findViewById(R.id.bHome3);
+        bRedd = (Button) findViewById(R.id.bRedd3);
+
+
+        //bLogout.setOnClickListener(this);
+        bHome.setOnClickListener(this);
+        bRedd.setOnClickListener(this);
 
 
         mUserLocalStore = new UserLocalStore(this);
@@ -93,13 +93,13 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     public void onClick(View v) {
         switch (v.getId()) {
 
-            case R.id.bLogout3:
-
-                mUserLocalStore.clearUserData();
-                mUserLocalStore.setUserLoggedIn(false);
-
-                startActivity(new Intent(this, Login.class));
-                break;
+//            case R.id.bLogout3:
+//
+//                mUserLocalStore.clearUserData();
+//                mUserLocalStore.setUserLoggedIn(false);
+//
+//                startActivity(new Intent(this, Login.class));
+//                break;
 
             case R.id.bHome3:
                 startActivity(new Intent(this, HomeActivity.class));
@@ -151,6 +151,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
     @Override
     public boolean onMyLocationButtonClick() {
+        enableMyLocation();
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
