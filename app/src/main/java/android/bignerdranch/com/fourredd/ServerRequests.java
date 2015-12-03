@@ -197,7 +197,7 @@ public class ServerRequests {
 
         public fetchForumDataAsyncTask(Forum forum, GetForumCallback forumCallback) {
             this.mForum = forum;
-            this.mForumCallback = mForumCallback;
+            this.mForumCallback = forumCallback;
         }
 
         @Override
@@ -230,8 +230,11 @@ public class ServerRequests {
 
 
 
-                Log.d("ADebugTag", "Value: \n" + result);
+                Log.d("ADebugTag", "JSON RETURN: \n" + result);
                 JSONArray jsonArray = new JSONArray(result);
+
+                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
+
 
                 if(jsonArray.length() ==0){
                     returnedForum = null;
@@ -241,7 +244,7 @@ public class ServerRequests {
 
                         JSONObject object = jsonArray.getJSONObject(i);
                         returnedForum.addThread(tempThread);
-                        Log.d("ADebugTag", "Value: \n" + returnedForum);
+                        Log.d("ADebugTag", "FORUM!!!!!!!!!!!!!!: \n" + returnedForum);
 
 
 

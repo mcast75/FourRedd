@@ -11,16 +11,16 @@ public class Forum {
 
     public Forum(){
 
-        allThreads = new ArrayList<Thread>();
+        this.allThreads = new ArrayList<Thread>();
     }
 
     public void addThread(Thread thread){
 
-        allThreads.add(thread);
+        this.allThreads.add(thread);
 
     }
 
     public ArrayList<Thread> getAllThreads(){
-        return allThreads;
+        return this.allThreads;
     }
 }

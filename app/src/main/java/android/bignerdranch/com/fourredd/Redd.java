@@ -32,6 +32,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
     Button bFour, bHome, bLogout;
     UserLocalStore mUserLocalStore;
     TextView createThread;
+    Forum forum;
 
 
     @Override
@@ -53,6 +54,8 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
 
         mUserLocalStore = new UserLocalStore(this);
+
+        forum = null;
     }
 
     @Override
@@ -75,6 +78,13 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        getForum(forum);
     }
 
 
@@ -109,11 +119,12 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
 
     private void getForum(Forum forum){
         ServerRequests serverRequests = new ServerRequests((this));
-        serverRequests.fetchForumDataAsyncTask(forum, new GetForumCallback() {
+        serverRequests.fetchForumInBackground(forum, new GetForumCallback() {
             @Override
             public void done(Forum returnedForum) {
-                startActivity(new Intent(Redd.this, Redd.class));
+                startActivity(new Intent(Redd.this, HomeActivity.class));
             }
+
 
         });
     }
