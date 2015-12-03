@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -218,10 +221,35 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                     comments.setPaintFlags(comments.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                     ll3.addView(comments);
 
+                    TextView space2 = new TextView(mContext);
+                    space2.setText("                                           ");
+                    ll3.addView(space2);
+                    ImageView thumbsup = new ImageView(mContext);
+                    ll3.addView(thumbsup);
+                    android.view.ViewGroup.LayoutParams layoutParams = thumbsup.getLayoutParams();
+                    layoutParams.width = 30;
+                    layoutParams.height = 30;
+                    thumbsup.setLayoutParams(layoutParams);
+                    thumbsup.setImageResource(R.drawable.thumbsup);
+
+
                     TextView tvNumLike = new TextView(mContext);
-                    tvNumLike.setText("                               Likes: " + temp.get(i).like + "");
+                    tvNumLike.setText("Likes(" + temp.get(i).like + ")      ");
                     tvNumLike.setTextSize(20);
                     ll3.addView(tvNumLike);
+
+                    ImageView thumbsdown = new ImageView(mContext);
+                    ll3.addView(thumbsdown);
+                    android.view.ViewGroup.LayoutParams layoutParams2 = thumbsdown.getLayoutParams();
+                    layoutParams2.width = 30;
+                    layoutParams2.height = 30;
+                    thumbsdown.setLayoutParams(layoutParams2);
+                    thumbsdown.setImageResource(R.drawable.thumbsdown);
+                    TextView tvNumDislikes = new TextView(mContext);
+                    tvNumDislikes.setText("Dislikes(" + temp.get(i).dislikes + ")");
+                    tvNumDislikes.setTextSize(20);
+                    ll3.addView(tvNumDislikes);
+
                     ll.addView(line);
 
 

@@ -4,17 +4,18 @@ package android.bignerdranch.com.fourredd;
  * Created by Mike on 11/24/15.
  */
 public class Thread {
-    int like, id;
+    int like, id, dislikes;
     String user, title, text;
 
 
-    public Thread(String user, String title, int like, int id, String text){
+    public Thread(String user, String title, int like, int dislikes, int id, String text){
 
         this.id = id;
         this.user = user;
         this.title = title;
         this.like = like;
         this.text = text;
+        this.dislikes = dislikes;
 
     }
 
@@ -26,6 +27,7 @@ public class Thread {
         this.title = title;
         this.text = text;
         this.like = 0;
+        this.dislikes = 0;
 
     }
 
@@ -38,6 +40,16 @@ public class Thread {
         this.title = "";
         this.like = 0;
         this.text = "";
+        this.dislikes = 0;
 
     }
+
+    public void addLike(){
+        like++;
+    }
+
+    public void addDislike(){
+        dislikes++;
+    }
+
 }

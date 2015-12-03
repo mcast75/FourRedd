@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.bignerdranch.com.fourredd">
+    package="android.bignerdranch.com.fourredd" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -23,10 +23,10 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".Login"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,22 +35,22 @@
         </activity>
         <activity
             android:name=".Four"
-            android:label="@string/title_activity_four"></activity>
+            android:label="@string/title_activity_four" />
         <activity
             android:name=".Redd"
-            android:label="@string/title_activity_redd"></activity>
+            android:label="@string/title_activity_redd" />
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home"></activity>
+            android:label="@string/title_activity_home" />
         <activity
             android:name=".Register"
-            android:label="@string/title_activity_register"></activity>
+            android:label="@string/title_activity_register" />
         <activity
             android:name=".CreateThread"
-            android:label="@string/title_activity_create_thread"></activity>
+            android:label="@string/title_activity_create_thread" />
         <activity
             android:name=".Comments"
-            android:label="@string/title_activity_comments"></activity>
+            android:label="@string/title_activity_comments" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -65,10 +65,14 @@
 
         <activity
             android:name=".FourMapActivity"
-            android:label="@string/title_activity_four_map"></activity>
-
-        <activity android:name=".TestFourMapActivity"
-                android:label="TestFourMap"></activity>
+            android:label="@string/title_activity_four_map" />
+        <activity
+            android:name=".TestFourMapActivity"
+            android:label="TestFourMap" />
+        <activity
+            android:name=".AddComment"
+            android:label="@string/title_activity_add_comment" >
+        </activity>
     </application>
 
 </manifest>

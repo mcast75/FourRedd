@@ -23,6 +23,7 @@ public class ThreadLocalStore {
         spEditor.putString("title", thread.title);
         spEditor.putString("text", thread.text);
         spEditor.putInt("num_like", thread.like);
+        spEditor.putInt("num_dislikes", thread.dislikes);
 
         spEditor.commit();
     }
@@ -33,9 +34,10 @@ public class ThreadLocalStore {
         String title = threadLocalDatabase.getString("title", "");
         String text = threadLocalDatabase.getString("text", "");
         int like = threadLocalDatabase.getInt("num_like", -1);
+        int dislikes = threadLocalDatabase.getInt("num_dislikes", -1);
 
 
-        Thread storedThread = new Thread(username, title, like, threadID, text);
+        Thread storedThread = new Thread(username, title, like, dislikes, threadID, text);
         return storedThread;
 
     }

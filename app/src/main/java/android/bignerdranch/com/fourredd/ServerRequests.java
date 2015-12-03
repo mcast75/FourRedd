@@ -53,6 +53,12 @@ public class ServerRequests {
 
     }
 
+    public void storeCommentDataInBackground(Comment comment, GetCommentCallback commentCallback){
+        mProgressDialog.show();
+        new StoreCommentDataAsyncTask(comment, commentCallback).execute();
+
+    }
+
 
     public void fetchUserDataInBackground(User user, GetUserCallback callback){
         mProgressDialog.show();
@@ -63,6 +69,12 @@ public class ServerRequests {
     public void fetchForumInBackground(Forum forum, GetForumCallback callback){
         mProgressDialog.show();
         new fetchForumDataAsyncTask(forum, callback).execute();
+
+    }
+
+    public void fetchCommentForumInBackground(CommentForum commentForum, Thread thread, GetCommentForumCallback callback){
+        mProgressDialog.show();
+        new fetchCommentForumDataAsyncTask(commentForum, thread, callback).execute();
 
     }
 
@@ -244,6 +256,7 @@ public class ServerRequests {
                         tempThread.text = object.get("text").toString();
                         tempThread.like = object.getInt("num_like");
                         tempThread.id = object.getInt("threadID");
+                        tempThread.dislikes = object.getInt("num_dislikes");
 
 
 
@@ -274,6 +287,93 @@ public class ServerRequests {
     }
 
 
+    public class fetchCommentForumDataAsyncTask extends AsyncTask<Void, Void, CommentForum> {
+        CommentForum mCommentForum;
+        GetCommentForumCallback mCommentForumCallback;
+        Thread mThread;
+
+        public fetchCommentForumDataAsyncTask(CommentForum commentForum, Thread thread, GetCommentForumCallback commentForumCallback) {
+            this.mCommentForum = commentForum;
+            this.mCommentForumCallback = commentForumCallback;
+            this.mThread = thread;
+        }
+
+        @Override
+        protected CommentForum doInBackground(Void... voids) {
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("currentThreadID", mThread.id+""));
+            Log.d("ADebugTag", "MTHREAD ID!!!!!: \n" + mThread.id);
+
+
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "FetchCommentForumData.php");
+
+            CommentForum returnedCommentForum = new CommentForum();
+            try{
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+
+
+                Log.d("ADebugTag", "JSON RETURN: \n" + result);
+                JSONArray jsonArray = new JSONArray(result);
+
+                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
+
+
+                if(jsonArray.length() ==0){
+                    returnedCommentForum = new CommentForum();
+                }else{
+                    int i = 0;
+                    for(i=0; i<jsonArray.length(); i++){
+                        Comment tempComment = new Comment();
+
+
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        tempComment.user = object.get("user").toString();
+                        tempComment.text = object.get("text").toString();
+                        tempComment.like = object.getInt("num_like");
+                        tempComment.threadID = object.getInt("threadID");
+                        tempComment.commentID = object.getInt("commentID");
+
+
+
+
+                        Log.d("ADebugTag", "COMMENTS!!!!!!!!!!!!!!: \n" + tempComment.text);
+                        returnedCommentForum.addComment(tempComment);
+
+
+                        //
+
+                    }
+
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return returnedCommentForum;
+        }
+
+        @Override
+        protected void onPostExecute(CommentForum returnedCommentForum){
+
+            mProgressDialog.dismiss();
+            mCommentForumCallback.done(returnedCommentForum);
+            super.onPostExecute(returnedCommentForum);
+        }
+    }
+
+
 
 
     public class StoreThreadDataAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -291,7 +391,8 @@ public class ServerRequests {
             dataToSend.add(new BasicNameValuePair("user", mThread.user));
             dataToSend.add(new BasicNameValuePair("title", mThread.title));
             dataToSend.add(new BasicNameValuePair("text", mThread.text));
-            dataToSend.add(new BasicNameValuePair("like", mThread.like+""));
+            dataToSend.add(new BasicNameValuePair("like", mThread.like + ""));
+            dataToSend.add(new BasicNameValuePair("dislikes", mThread.dislikes+""));
 
 
 
@@ -337,7 +438,63 @@ public class ServerRequests {
     }
 
 
+    public class StoreCommentDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        Comment mComment;
+        GetCommentCallback mCommentCallback;
+        public StoreCommentDataAsyncTask(Comment comment, GetCommentCallback commentCallback){
+            this.mComment = comment;
+            this.mCommentCallback = commentCallback;
+        }
 
+        @Override
+        protected Void doInBackground(Void...params){
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("threadID", mComment.threadID+""));
+            dataToSend.add(new BasicNameValuePair("user", mComment.user));
+            dataToSend.add(new BasicNameValuePair("text", mComment.text));
+            dataToSend.add(new BasicNameValuePair("num_like", mComment.like+""));
+
+
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "NewComment.php");
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+
+
+                Log.d("ADebugTag", "Value: COMMENT!!!!!!!!!!!!!!!!!!!!!!! \n\n\n" + result);
+                JSONObject jsonObject = new JSONObject(result);
+
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid){
+
+            mProgressDialog.dismiss();
+            mCommentCallback.done(null);
+            super.onPostExecute(aVoid);
+        }
+    }
 
 
 

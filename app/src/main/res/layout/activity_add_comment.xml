@@ -1,0 +1,124 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="android.bignerdranch.com.fourredd.CreateThread">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_blue_bright"
+            android:weightSum="1000"
+            android:layout_marginBottom="25dp">
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Comment"
+                android:textSize="36dp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_weight="999"/>
+            <Button
+                android:id="@+id/bLogout2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="10dp"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="28dp"
+                android:text="Logout"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thread:"
+                android:textSize="30dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/threadTitle"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:minLines="1"
+                android:gravity="top|left"
+                android:maxLength="64"
+                android:maxLines="2"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:scrollbars="vertical"
+                android:textSize="28dp"
+                android:layout_marginBottom="48dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                android:textSize="30dp"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:id="@+id/commentPost"
+                android:inputType="textMultiLine"
+                android:lines="4"
+                android:maxLines="8"
+                android:minLines="1"
+                android:gravity="top|left"
+                android:maxLength="256"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:scrollbars="vertical"
+                android:textSize="28dp"/>
+
+            <TextView
+                android:layout_marginTop="250dp"
+                android:id="@+id/makeComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/holo_blue_bright"
+                android:textSize="28dp"
+                android:text="Publish My Comment!"
+                android:clickable="true"
+                android:imeOptions="actionNext"
+                android:singleLine="false"/>
+
+
+            <TextView
+                android:textColor="@android:color/holo_blue_bright"
+                android:layout_marginTop="50dp"
+                android:id="@+id/cancelComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="28dp"
+                android:text="Forget It! Don't Post This."
+                android:clickable="true"
+                android:imeOptions="actionDone"/>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

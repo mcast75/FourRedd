@@ -12,4 +12,5 @@
     <string name="title_activity_comments">Comments</string>
     <string name="title_activity_four_map">FourMap</string>
     <string name="activity_test_map">Activity Test Map</string>
+    <string name="title_activity_add_comment">AddComment</string>
 </resources>
