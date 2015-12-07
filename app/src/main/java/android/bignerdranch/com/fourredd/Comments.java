@@ -169,7 +169,7 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                     Thread temp = mThreadLocalStore.getCurrentThread();
                     temp.addDislike();
                     Log.d("ADebugTag", "ThreadLikes!!!!!: \n" + temp.dislikes);
-                    numLikes.setText(temp.dislikes + "");
+                    numDislikes.setText(temp.dislikes + "");
                     mThreadLocalStore.clearThreadData();
                     mThreadLocalStore.storeThreadData(temp);
                     cbLike.setClickable(false);
@@ -307,32 +307,14 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                     ll3 = new LinearLayout(mContext);
                     ll.addView(ll3);
                     space = new TextView(mContext);
-                    space.setText("       ");
+                    space.setText("      ");
                     ll3.addView(space);
                     comments = new TextView(mContext);
                     comments.setText("Submitted by: " + temp.get(i).user);
                     comments.setTextSize(20);
                     ll3.addView(comments);
-
-
-                    LinearLayout ll4 = new LinearLayout(mContext);
-                    ll.addView(ll4);
-
-                    CheckBox cbLike1 = new CheckBox(mContext);
-                    cbLike1.setText("(Likes)");
-                    cbLike1.setTextSize(20);
-
-                    space = new TextView(mContext);
-                    space.setText("                 ");
-                    ll4.addView(space);
-
-                    CheckBox cbDislike1 = new CheckBox(mContext);
-                    cbDislike1.setText("(Dislikes)");
-                    cbDislike1.setTextSize(20);
-
-                    ll4.addView(cbLike1);
-                    ll4.addView(cbDislike1);
                     ll.addView(line);
+
 
 
                 }

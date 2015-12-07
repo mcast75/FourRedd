@@ -1,6 +1,8 @@
 package android.bignerdranch.com.fourredd;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -40,7 +42,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private GoogleMap mMap;
 
 
-    Button bHome, bRedd, bLogout;
+    Button bHome, bRedd, bLogout, shareLocation;
     UserLocalStore mUserLocalStore;
 
 
@@ -57,7 +59,6 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         //bLogout = (Button) findViewById(R.id.bLogout3);
         bHome = (Button) findViewById(R.id.bHome3);
         bRedd = (Button) findViewById(R.id.bRedd3);
-
 
         //bLogout.setOnClickListener(this);
         bHome.setOnClickListener(this);
@@ -88,6 +89,25 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+
+        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
+
+
+
+
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -132,6 +152,11 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
             Log.d("ADEBUGTAG", "Longitude:  \n" + longitude);
         }
     };
+
+
+
+
+
 
     /**
      * Enables the My Location layer if the fine location permission has been granted.
@@ -194,5 +219,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
+
+
 
 }
