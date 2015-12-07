@@ -45,11 +45,11 @@ public class Thread {
     }
 
     public void addLike(){
-        like++;
+        this.like++;
     }
 
     public void addDislike(){
-        dislikes++;
+        this.dislikes++;
     }
 
 }

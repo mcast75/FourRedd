@@ -2,6 +2,7 @@ package android.bignerdranch.com.fourredd;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -50,6 +51,12 @@ public class ServerRequests {
     public void storeThreadDataInBackground(Thread thread, GetThreadCallback threadCallBack){
         mProgressDialog.show();
         new StoreThreadDataAsyncTask(thread, threadCallBack).execute();
+
+    }
+
+    public void storeThreadLikeDataInBackground(Thread thread, GetThreadCallback threadCallBack){
+        mProgressDialog.show();
+        new StoreThreadLikeDataAsyncTask(thread, threadCallBack).execute();
 
     }
 
@@ -110,17 +117,10 @@ public class ServerRequests {
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
                 HttpResponse httpResponse = client.execute(post);
 
-                HttpEntity entity = httpResponse.getEntity();
-                String result = EntityUtils.toString(entity);
-
-
-
-                Log.d("ADebugTag", "Value: \n" + result);
-                JSONObject jsonObject = new JSONObject(result);
-
 
 
             } catch (Exception e) {
+                Log.d("ADebugTag", "Register Fail: \n");
                 e.printStackTrace();
             }
 
@@ -392,7 +392,7 @@ public class ServerRequests {
             dataToSend.add(new BasicNameValuePair("title", mThread.title));
             dataToSend.add(new BasicNameValuePair("text", mThread.text));
             dataToSend.add(new BasicNameValuePair("like", mThread.like + ""));
-            dataToSend.add(new BasicNameValuePair("dislikes", mThread.dislikes+""));
+            dataToSend.add(new BasicNameValuePair("dislikes", mThread.dislikes + ""));
 
 
 
@@ -436,6 +436,58 @@ public class ServerRequests {
             super.onPostExecute(aVoid);
         }
     }
+
+
+    public class StoreThreadLikeDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        Thread mThread;
+        GetThreadCallback threadCallback;
+        public StoreThreadLikeDataAsyncTask(Thread thread, GetThreadCallback threadCallback){
+            this.mThread = thread;
+            this.threadCallback = threadCallback;
+        }
+
+        @Override
+        protected Void doInBackground(Void...params){
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("threadID", mThread.id+""));
+            dataToSend.add(new BasicNameValuePair("user", mThread.user));
+            dataToSend.add(new BasicNameValuePair("title", mThread.title));
+            dataToSend.add(new BasicNameValuePair("text", mThread.text));
+            dataToSend.add(new BasicNameValuePair("like", mThread.like + ""));
+            dataToSend.add(new BasicNameValuePair("dislikes", mThread.dislikes+""));
+
+
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "UpdateThread.php");
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+
+                HttpResponse httpResponse = client.execute(post);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid){
+
+            mProgressDialog.dismiss();
+            threadCallback.done(null);
+            super.onPostExecute(aVoid);
+        }
+    }
+
 
 
     public class StoreCommentDataAsyncTask extends AsyncTask<Void, Void, Void> {

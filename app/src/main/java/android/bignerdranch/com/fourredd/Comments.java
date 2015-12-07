@@ -149,11 +149,17 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
             case R.id.bLike:
                 if(checked) {
                     Thread temp = mThreadLocalStore.getCurrentThread();
-                    temp.addLike();
                     Log.d("ADebugTag", "ThreadLikes!!!!!: \n" + temp.like);
+
+                    temp.addLike();
                     numLikes.setText(temp.like + "");
                     mThreadLocalStore.clearThreadData();
                     mThreadLocalStore.storeThreadData(temp);
+                    Log.d("ADebugTag", "ThreadLikes!!!!!: \n" + mThreadLocalStore.getCurrentThread().like);
+
+                    cbLike.setClickable(false);
+                    cbDislike.setClickable(false);
+                    updateThread(mThreadLocalStore.getCurrentThread());
                 }
                     //send to database
                 break;
@@ -166,10 +172,26 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                     numLikes.setText(temp.dislikes + "");
                     mThreadLocalStore.clearThreadData();
                     mThreadLocalStore.storeThreadData(temp);
+                    cbLike.setClickable(false);
+                    cbDislike.setClickable(false);
+                    updateThread(mThreadLocalStore.getCurrentThread());
+
                 }
                 //send to database
                 break;
         }
+    }
+
+
+    private void updateThread(Thread thread){
+        ServerRequests serverRequests = new ServerRequests((this));
+        serverRequests.storeThreadLikeDataInBackground(thread, new GetThreadCallback() {
+            @Override
+            public void done(Thread returnedUser) {
+
+            }
+
+        });
     }
 
 
@@ -285,17 +307,31 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                     ll3 = new LinearLayout(mContext);
                     ll.addView(ll3);
                     space = new TextView(mContext);
-                    space.setText("      ");
+                    space.setText("       ");
                     ll3.addView(space);
                     comments = new TextView(mContext);
                     comments.setText("Submitted by: " + temp.get(i).user);
                     comments.setTextSize(20);
                     ll3.addView(comments);
 
-                    tvNumLike = new TextView(mContext);
-                    tvNumLike.setText("                               Likes: " + temp.get(i).like + "");
-                    tvNumLike.setTextSize(20);
-                    ll3.addView(tvNumLike);
+
+                    LinearLayout ll4 = new LinearLayout(mContext);
+                    ll.addView(ll4);
+
+                    CheckBox cbLike1 = new CheckBox(mContext);
+                    cbLike1.setText("(Likes)");
+                    cbLike1.setTextSize(20);
+
+                    space = new TextView(mContext);
+                    space.setText("                 ");
+                    ll4.addView(space);
+
+                    CheckBox cbDislike1 = new CheckBox(mContext);
+                    cbDislike1.setText("(Dislikes)");
+                    cbDislike1.setTextSize(20);
+
+                    ll4.addView(cbLike1);
+                    ll4.addView(cbDislike1);
                     ll.addView(line);
 
 
