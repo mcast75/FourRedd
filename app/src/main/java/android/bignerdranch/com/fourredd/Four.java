@@ -2,6 +2,7 @@ package android.bignerdranch.com.fourredd;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,7 +29,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Four extends AppCompatActivity implements View.OnClickListener, OnMyLocationButtonClickListener,
@@ -40,6 +49,8 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private Marker mMarker;
 
     private GoogleMap mMap;
+
+    private Context mContext;
 
 
     Button bHome, bRedd, bLogout, shareLocation;
@@ -64,6 +75,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         bHome.setOnClickListener(this);
         bRedd.setOnClickListener(this);
 
+        mContext = this;
 
         mUserLocalStore = new UserLocalStore(this);
     }
@@ -90,17 +102,88 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         return super.onOptionsItemSelected(item);
     }
 
+    public void addUserMarkers() throws JSONException {
+        Log.d("ADEBUGTAG", "Longitude:  \n");
+        JSONObject thing = new JSONObject();
+        thing.put("latitude", 51.7474);
+        thing.put("longitude", 82.6900);
+        thing.put("username", "stevenyee");
+
+        JSONArray results = new JSONArray();
+        results.put(thing);
+        int size = results.length();
+//        TableLayout table = (TableLayout) findViewById(R.id.table);
+        for (int i = 0; i < size; i++) {
+            Log.d("ADEBUGTAG", "Latitiude:  \n" + results.getJSONObject(0).getDouble("latitude"));
+            Log.d("ADEBUGTAG", "Longitude:  \n" + results.getJSONObject(0).getDouble("longitude"));
+            Log.d("ADEBUGTAG", "Username:  \n" + results.getJSONObject(0).get("username").toString());
+            Log.d("ADEBUGTAG", "MAPAA:  \n" + mMap);
+            LatLng markerLocation = new LatLng(results.getJSONObject(0).getDouble("latitude"), results.getJSONObject(0).getDouble("longitude"));
+            Marker temp = mMap.addMarker(new MarkerOptions().position(markerLocation).title(results.getJSONObject(0).get("username").toString()));
+            Log.d("ADEBUGTAG", "MARKERS:  \n" + temp);
+//  printMarkerInformation(table, temp);
+        }
+    }
+
+    public void printMarkerInformation(TableLayout table, Marker marker) {
+        TableRow row = new TableRow(mContext);
+        row = new TableRow(mContext);
+        table.addView(row);
+        Log.d("ADebugTag", "LOG ID!!!!!!!!!!!!!!: \n" + marker.getTitle());
+        LinearLayout ll = new LinearLayout(mContext);
+        ll = new LinearLayout(mContext);
+        row.addView(ll);
+
+        ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(0, 0, 0, 70);
+
+        LinearLayout ll2 = new LinearLayout(mContext);
+        ll.setPadding(0, 0, 0, 40);
+        ll.addView(ll2);
+        TextView tvTitle = new TextView(mContext);
+        tvTitle.setText(marker.getTitle());
+        tvTitle.setTextColor(Color.BLACK);
+        tvTitle.setTextSize(24);
+        ll2.addView(tvTitle);
+        TextView line = new TextView(mContext);
+        line.setTextSize(2);
+        line.setTextColor(Color.BLACK);
+        line.setText("_____________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "_______________________________________________________________________" +
+                "______________________________________________________________________");
+
+
+        LinearLayout ll3 = new LinearLayout(mContext);
+        ll.addView(ll3);
+        TextView space = new TextView(mContext);
+        space.setText("      ");
+        ll3.addView(space);
+        TextView comments = new TextView(mContext);
+        comments.setText("Latitude and Longitude: " + marker.getPosition());
+        comments.setTextSize(20);
+        ll3.addView(comments);
+        ll.addView(line);
+    }
+
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
+//        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        double longitude = location.getLongitude();
+//        double latitude = location.getLatitude();
 
-        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
+//        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
 
 
 
@@ -140,16 +223,21 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);
         enableMyLocation();
+        try {
+            addUserMarkers();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
-            Log.d("ADEBUGTAG", "Start Map:  \n" + "Enters Location");
-            double latitude = location.getLatitude();
-            Log.d("ADEBUGTAG", "LATITUDE:  \n" + latitude);
-            double longitude = location.getLongitude();
-            Log.d("ADEBUGTAG", "Longitude:  \n" + longitude);
+//            Log.d("ADEBUGTAG", "Start Map:  \n" + "Enters Location");
+//            double latitude = location.getLatitude();
+//            Log.d("ADEBUGTAG", "LATITUDE:  \n" + latitude);
+//            double longitude = location.getLongitude();
+//            Log.d("ADEBUGTAG", "Longitude:  \n" + longitude);
         }
     };
 
