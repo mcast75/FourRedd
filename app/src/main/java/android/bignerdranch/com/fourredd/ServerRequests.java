@@ -21,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -66,6 +67,12 @@ public class ServerRequests {
 
     }
 
+    public void storeLocationDataInBackground(LocationObject locationObject, GetLocationCallback locationCallback){
+        mProgressDialog.show();
+        new StoreLocationDataAsyncTask(locationObject, locationCallback).execute();
+
+    }
+
 
     public void fetchUserDataInBackground(User user, GetUserCallback callback){
         mProgressDialog.show();
@@ -84,6 +91,13 @@ public class ServerRequests {
         new fetchCommentForumDataAsyncTask(commentForum, thread, callback).execute();
 
     }
+
+    public void fetchLocationForumInBackground(LocationForum locationForum, GetLocationForumCallback locationForumCallback){
+        mProgressDialog.show();
+        new fetchLocationForumDataAsyncTask(locationForum, locationForumCallback).execute();
+
+    }
+
 
     public class StoreUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
         User mUser;
@@ -133,6 +147,53 @@ public class ServerRequests {
 
             mProgressDialog.dismiss();
             userCallback.done(null);
+            super.onPostExecute(aVoid);
+        }
+    }
+
+
+    public class StoreLocationDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        LocationObject mLocationObject;
+        GetLocationCallback mGetLocationCallback;
+        public StoreLocationDataAsyncTask(LocationObject locationObject, GetLocationCallback locationCallback){
+            this.mLocationObject = locationObject;
+            this.mGetLocationCallback = locationCallback;
+        }
+
+        @Override
+        protected Void doInBackground(Void...params){
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+            dataToSend.add(new BasicNameValuePair("user", mLocationObject.user));
+            dataToSend.add(new BasicNameValuePair("latitude", mLocationObject.latitude+""));
+            dataToSend.add(new BasicNameValuePair("longitude", mLocationObject.longitude+""));
+
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "AddLocation.php");
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                client.execute(post);
+
+            } catch (Exception e) {
+                Log.d("ADebugTag", "Register Fail: \n");
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid){
+
+            mProgressDialog.dismiss();
+            mGetLocationCallback.done(null);
             super.onPostExecute(aVoid);
         }
     }
@@ -285,6 +346,90 @@ public class ServerRequests {
             super.onPostExecute(returnedForum);
         }
     }
+
+
+    public class fetchLocationForumDataAsyncTask extends AsyncTask<Void, Void, LocationForum> {
+        LocationForum mLocationForum;
+        GetLocationForumCallback mLocationForumCallback;
+
+        public fetchLocationForumDataAsyncTask(LocationForum forum, GetLocationForumCallback forumCallback) {
+            this.mLocationForum = forum;
+            this.mLocationForumCallback = forumCallback;
+        }
+
+        @Override
+        protected LocationForum doInBackground(Void... voids) {
+
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
+
+
+
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            HttpClient client = new DefaultHttpClient(httpRequestParams);
+            HttpPost post = new HttpPost(SERVER_ADDRESS + "FetchLocationForumData.php");
+
+            LocationForum returnedForum = new LocationForum();
+            try{
+                post.setEntity(new UrlEncodedFormEntity(dataToSend));
+                HttpResponse httpResponse = client.execute(post);
+
+                HttpEntity entity = httpResponse.getEntity();
+                String result = EntityUtils.toString(entity);
+
+
+
+                Log.d("ADebugTag", "JSON RETURN: \n" + result);
+                JSONArray jsonArray = new JSONArray(result);
+
+                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
+
+
+                if(jsonArray.length() ==0){
+                    returnedForum = null;
+                }else{
+                    int i = 0;
+                    for(i=0; i<jsonArray.length(); i++){
+                        LocationObject tempObject = new LocationObject();
+
+
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        tempObject.user = object.get("username").toString();
+                        tempObject.latitude = object.getDouble("latitude");
+                        tempObject.longitude = object.getDouble("longitude");
+
+                        Log.d("ADebugTag", "AHHHHHHHH!!!!!!!!!!!!!!: \n" + tempObject.user);
+                        returnedForum.addLocation(tempObject);
+
+
+                        //
+
+                    }
+
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return returnedForum;
+        }
+
+        @Override
+        protected void onPostExecute(LocationForum returnedForum){
+
+            mProgressDialog.dismiss();
+            try {
+                mLocationForumCallback.done(returnedForum);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            super.onPostExecute(returnedForum);
+        }
+    }
+
+
 
 
     public class fetchCommentForumDataAsyncTask extends AsyncTask<Void, Void, CommentForum> {

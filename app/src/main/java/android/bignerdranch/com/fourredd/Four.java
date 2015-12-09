@@ -2,6 +2,10 @@ package android.bignerdranch.com.fourredd;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,7 +32,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 
 public class Four extends AppCompatActivity implements View.OnClickListener, OnMyLocationButtonClickListener,
@@ -41,9 +56,21 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
     private GoogleMap mMap;
 
+    LocationObject mLocationObject;
+
 
     Button bHome, bRedd, bLogout, shareLocation;
     UserLocalStore mUserLocalStore;
+
+    Timestamp mTimestamp;
+
+    ArrayList<LocationObject> temp;
+
+    Context mContext;
+
+    LocationForum mLocationForum;
+
+
 
 
     @Override
@@ -59,13 +86,23 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         //bLogout = (Button) findViewById(R.id.bLogout3);
         bHome = (Button) findViewById(R.id.bHome3);
         bRedd = (Button) findViewById(R.id.bRedd3);
+        shareLocation = (Button) findViewById(R.id.shareLoc);
 
         //bLogout.setOnClickListener(this);
         bHome.setOnClickListener(this);
         bRedd.setOnClickListener(this);
+        shareLocation.setOnClickListener(this);
 
 
         mUserLocalStore = new UserLocalStore(this);
+
+        temp = new ArrayList<LocationObject>();
+
+        mContext = this;
+
+        mLocationForum = null;
+
+
     }
 
     @Override
@@ -102,6 +139,8 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
         Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
 
+        getLocationForum(mLocationForum);
+
 
 
 
@@ -113,13 +152,27 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     public void onClick(View v) {
         switch (v.getId()) {
 
-//            case R.id.bLogout3:
-//
-//                mUserLocalStore.clearUserData();
-//                mUserLocalStore.setUserLoggedIn(false);
-//
-//                startActivity(new Intent(this, Login.class));
-//                break;
+            case R.id.shareLoc:
+
+                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                double longitude = location.getLongitude();
+                double latitude = location.getLatitude();
+
+                final LatLng newLoc = new LatLng(latitude, longitude);
+                Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
+                add.setVisible(true);
+                add.setTitle("Penis");
+
+
+                mLocationObject = new LocationObject(mUserLocalStore.getLoggedInUser().name, latitude, longitude);
+
+                makeLocation(mLocationObject);
+
+                startActivity(new Intent(this, Four.class));
+
+
+                break;
 
             case R.id.bHome3:
                 startActivity(new Intent(this, HomeActivity.class));
@@ -139,6 +192,17 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);
+
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+
+        final LatLng newLoc = new LatLng(latitude, longitude);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLoc, 7));
+
+
         enableMyLocation();
     }
 
@@ -218,6 +282,98 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private void showMissingPermissionError() {
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
+    }
+
+    private void makeLocation(LocationObject locationObject){
+        ServerRequests serverRequests = new ServerRequests((this));
+        serverRequests.storeLocationDataInBackground(locationObject, new GetLocationCallback() {
+            @Override
+            public void done(LocationObject returnedLocation) {
+            }
+
+        });
+    }
+
+
+    private void getLocationForum(LocationForum forum){
+        ServerRequests serverRequests = new ServerRequests((this));
+        serverRequests.fetchLocationForumInBackground(forum, new GetLocationForumCallback() {
+            @Override
+            public void done(LocationForum returnedForum) throws IOException {
+
+                TableLayout table = (TableLayout) findViewById(R.id.table);
+                table.setPadding(0,20,0,0);
+                int i = 0;
+                temp = returnedForum.getAllLocations();
+
+
+                for (i = 0; i < temp.size(); i++) {
+
+
+                    final LatLng newLoc = new LatLng(temp.get(i).latitude, temp.get(i).longitude);
+                    Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
+                    add.setVisible(true);
+                    add.setTitle(temp.get(i).user);
+
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    geocoder = new Geocoder(mContext, Locale.getDefault());
+                    addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+                    String known = addresses.get(0).getFeatureName();
+
+
+                    TableRow row = new TableRow(mContext);
+                    table.addView(row);
+
+                    LinearLayout ll = new LinearLayout(mContext);
+                    row.addView(ll);
+
+
+
+                    ll.setOrientation(LinearLayout.VERTICAL);
+                    ll.setPadding(0, 0, 0, 70);
+
+                    LinearLayout ll2 = new LinearLayout(mContext);
+                    ll.setPadding(0, 0, 0, 40);
+                    ll.addView(ll2);
+                    TextView tvTitle = new TextView(mContext);
+
+                    if(known != null)
+                        tvTitle.setText("   "+temp.get(i).user+" has checked in at "+known);
+                    else
+                        tvTitle.setText("   " + temp.get(i).user + " has checked in at " + city + ", " + state);
+
+                    Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
+
+                    tvTitle.setTextColor(Color.BLACK);
+                    tvTitle.setTextSize(24);
+                    ll2.addView(tvTitle);
+                    TextView line = new TextView(mContext);
+                    line.setTextSize(2);
+                    line.setTextColor(Color.BLACK);
+                    line.setText("_____________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "_______________________________________________________________________" +
+                            "______________________________________________________________________");
+
+
+                    ll.addView(line);
+
+
+                }
+            }
+
+
+        });
     }
 
 

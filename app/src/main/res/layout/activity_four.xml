@@ -16,21 +16,37 @@
             android:layout_width="match_parent"
             android:layout_height="500dp" />
 
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:baselineAligned="false">
-
-
-
-        </LinearLayout>
     </FrameLayout>
 
 
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="500dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="270dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TableLayout android:id="@+id/table"
+                             android:layout_width="wrap_content"
+                             android:layout_height="fill_parent"
+                             android:focusableInTouchMode="true"
+                             android:focusable="true">
+
+                </TableLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
 
 
     <LinearLayout
@@ -39,6 +55,8 @@
         android:orientation="horizontal"
         android:baselineAligned="false"
         android:gravity="bottom">
+
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -58,7 +76,7 @@
             android:layout_weight="2">
 
             <Button
-                android:id="@+id/bRedd3"
+                android:id="@+id/shareLoc"
                 android:textSize="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

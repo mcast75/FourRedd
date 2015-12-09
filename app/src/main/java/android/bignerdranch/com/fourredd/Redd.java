@@ -213,7 +213,7 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                     ll3.addView(space);
                     TextView comments = new TextView(mContext);
                     comments.setText("Comments");
-                    comments.setClickable(true);
+                    comments.setLinksClickable(true);
                     comments.setTag("comments");
                     comments.setId(R.id.comments);
                     comments.setTextSize(20);
