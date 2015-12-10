@@ -340,10 +340,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                     ll.addView(ll2);
                     TextView tvTitle = new TextView(mContext);
 
-                    if(known != null)
-                        tvTitle.setText("   "+temp.get(i).user+" has checked in at "+known);
-                    else
-                        tvTitle.setText("   " + temp.get(i).user + " has checked in at " + city + ", " + state);
+                    tvTitle.setText("   " + temp.get(i).user + " has checked in at " + city + ", " + state);
 
                     Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
 

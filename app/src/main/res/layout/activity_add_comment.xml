@@ -26,14 +26,7 @@
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:layout_weight="999"/>
-            <Button
-                android:id="@+id/bLogout2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingBottom="10dp"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textSize="28dp"
-                android:text="Logout"/>
+
         </LinearLayout>
 
         <LinearLayout

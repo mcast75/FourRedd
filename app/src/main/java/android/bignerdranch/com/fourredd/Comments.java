@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -206,8 +207,8 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                 temp = returnedCommentForum.getAllComments();
 
                 threadTitle.setText(mThreadLocalStore.getCurrentThread().title);
-                numLikes.setText(mThreadLocalStore.getCurrentThread().like+"");
-                numDislikes.setText(mThreadLocalStore.getCurrentThread().dislikes+"");
+                numLikes.setText(mThreadLocalStore.getCurrentThread().like + "");
+                numDislikes.setText(mThreadLocalStore.getCurrentThread().dislikes + "");
 
 
 
@@ -226,7 +227,12 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                 ll.setPadding(0, 0, 0, 40);
                 ll.addView(ll2);
                 TextView tvTitle = new TextView(mContext);
+                Point size = new Point();
+                getWindowManager().getDefaultDisplay().getSize(size);
+                int width = size.x;
                 tvTitle.setText(mThreadLocalStore.getCurrentThread().text);
+                tvTitle.setLayoutParams(new LinearLayout.LayoutParams(width - 10
+                        , ViewGroup.LayoutParams.WRAP_CONTENT));
                 tvTitle.setTextColor(Color.BLACK);
                 tvTitle.setTextSize(24);
                 ll2.addView(tvTitle);
@@ -285,6 +291,13 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                     ll.addView(ll2);
                     tvTitle = new TextView(mContext);
                     tvTitle.setText(temp.get(i).text);
+                    Point size2 = new Point();
+                    getWindowManager().getDefaultDisplay().getSize(size2);
+                    int width2 = size2.x;
+                    tvTitle.setText(mThreadLocalStore.getCurrentThread().text);
+                    tvTitle.setLayoutParams(new LinearLayout.LayoutParams(width2 - 10
+                            , ViewGroup.LayoutParams.WRAP_CONTENT));
+
                     tvTitle.setTextColor(Color.BLACK);
                     tvTitle.setTextSize(24);
                     ll2.addView(tvTitle);
