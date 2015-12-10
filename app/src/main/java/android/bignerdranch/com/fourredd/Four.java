@@ -140,6 +140,8 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
 
         getLocationForum(mLocationForum);
+        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + mLocationForum);
+        Log.d("ADEBUGTAG", "ANDROID ONONONIONLBYUVLHFLBFILE:  \n" + "buibgortunbiorbnriobntroib");
 
 
 
