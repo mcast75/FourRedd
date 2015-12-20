@@ -277,7 +277,7 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                     table.addView(row);
                     row.setId(i);
                     row.setClickable(true);
-                    Log.d("ADebugTag", "LOG ID!!!!!!!!!!!!!!: \n" + row.getId());
+//                    Log.d("ADebugTag", "LOG ID!!!!!!!!!!!!!!: \n" + row.getId());
                     ll = new LinearLayout(mContext);
                     row.addView(ll);
                     row.setOnClickListener(Comments.this);
@@ -294,7 +294,7 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                     Point size2 = new Point();
                     getWindowManager().getDefaultDisplay().getSize(size2);
                     int width2 = size2.x;
-                    tvTitle.setText(mThreadLocalStore.getCurrentThread().text);
+                    tvTitle.setText(temp.get(i).text);
                     tvTitle.setLayoutParams(new LinearLayout.LayoutParams(width2 - 10
                             , ViewGroup.LayoutParams.WRAP_CONTENT));
 

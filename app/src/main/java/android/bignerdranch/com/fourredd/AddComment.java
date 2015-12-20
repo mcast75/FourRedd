@@ -52,13 +52,8 @@ public class AddComment extends AppCompatActivity implements View.OnClickListene
                 String text =  commentPost.getText().toString();
                 int threadID = mThreadLocalStore.getCurrentThread().id;
 
-
                 Comment temp = new Comment(threadID, user, text);
-
-                Log.d("Register", "ValueTHREAD: \n\n\n\n\n name"+temp.user+ "   post" + temp.text + "    ID  " + threadID);
-
-
-
+                Log.d("Register", "ValueTHREAD: name "+temp.user+ "   post " + temp.text + "    ID  " + threadID);
                 makeComment(temp);
 
 

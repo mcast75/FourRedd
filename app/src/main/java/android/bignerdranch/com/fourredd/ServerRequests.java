@@ -235,7 +235,7 @@ public class ServerRequests {
 
 
 
-                Log.d("ADebugTag", "Value: \n" + result);
+//                Log.d("ADebugTag", "Value: \n" + result);
                 JSONObject jsonObject = new JSONObject(result);
 
                 if(jsonObject.length() ==0){
@@ -297,10 +297,10 @@ public class ServerRequests {
 
 
 
-                Log.d("ADebugTag", "JSON RETURN: \n" + result);
+//                Log.d("ADebugTag", "JSON RETURN: \n" + result);
                 JSONArray jsonArray = new JSONArray(result);
 
-                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
+//                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
 
 
                 if(jsonArray.length() ==0){
@@ -381,10 +381,10 @@ public class ServerRequests {
 
 
 
-                Log.d("ADebugTag", "JSON RETURN: \n" + result);
+//                Log.d("ADebugTag", "JSON RETURN: \n" + result);
                 JSONArray jsonArray = new JSONArray(result);
 
-                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
+//                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
 
 
                 if(jsonArray.length() ==0){
@@ -448,7 +448,7 @@ public class ServerRequests {
 
             ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("currentThreadID", mThread.id+""));
-            Log.d("ADebugTag", "MTHREAD ID!!!!!: \n" + mThread.id);
+//            Log.d("ADebugTag", "MTHREAD ID!!!!!: \n" + mThread.id);
 
 
 
@@ -469,10 +469,10 @@ public class ServerRequests {
 
 
 
-                Log.d("ADebugTag", "JSON RETURN: \n" + result);
+//                Log.d("ADebugTag", "JSON RETURN: \n" + result);
                 JSONArray jsonArray = new JSONArray(result);
 
-                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
+//                Log.d("ADebugTag", "JSON ARRAY!!!!!: \n" + jsonArray);
 
 
                 if(jsonArray.length() ==0){
@@ -493,7 +493,7 @@ public class ServerRequests {
 
 
 
-                        Log.d("ADebugTag", "COMMENTS!!!!!!!!!!!!!!: \n" + tempComment.text);
+//                        Log.d("ADebugTag", "COMMENTS!!!!!!!!!!!!!!: \n" + tempComment.text);
                         returnedCommentForum.addComment(tempComment);
 
 
@@ -558,10 +558,10 @@ public class ServerRequests {
 
 
 
-                Log.d("ADebugTag", "Value: Thread!!!!!!!!!!!!!!!!!!!!!!! \n\n\n" + result);
+//                Log.d("ADebugTag", "Value: Thread!!!!!!!!!!!!!!!!!!!!!!! \n\n\n" + result);
                 JSONObject jsonObject = new JSONObject(result);
 
-                Log.d("Register", "ValueJSON: \n\n\n\n\n" + result);
+//                Log.d("Register", "ValueJSON: \n\n\n\n\n" + result);
 
 
 
@@ -671,7 +671,7 @@ public class ServerRequests {
 
 
 
-                Log.d("ADebugTag", "Value: COMMENT!!!!!!!!!!!!!!!!!!!!!!! \n\n\n" + result);
+//                Log.d("ADebugTag", "Value: COMMENT!!!!!!!!!!!!!!!!!!!!!!! \n\n\n" + result);
                 JSONObject jsonObject = new JSONObject(result);
 
 
