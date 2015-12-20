@@ -202,11 +202,8 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
-//            Log.d("ADEBUGTAG", "Start Map:  \n" + "Enters Location");
             mLatitude = location.getLatitude();
-//            Log.d("ADEBUGTAG", "LATITUDE:  \n" + mLatitude);
             mLongitude = location.getLongitude();
-//            Log.d("ADEBUGTAG", "Longitude:  \n" + mLongitude);
         }
     };
 
@@ -236,8 +233,6 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     public boolean onMyLocationButtonClick() {
         enableMyLocation();
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
         return false;
     }
 
@@ -301,10 +296,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                 int i = 0;
                 temp = returnedForum.getAllLocations();
 
-
                 for (i = 0; i < temp.size(); i++) {
-
-
                     final LatLng newLoc = new LatLng(temp.get(i).latitude, temp.get(i).longitude);
                     Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
                     add.setVisible(true);
@@ -317,14 +309,11 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                     String state = " ";
                     String known = " ";
 
-
                     TableRow row = new TableRow(mContext);
                     table.addView(row);
 
                     LinearLayout ll = new LinearLayout(mContext);
                     row.addView(ll);
-
-
 
                     ll.setOrientation(LinearLayout.VERTICAL);
                     ll.setPadding(0, 0, 0, 70);
@@ -342,6 +331,9 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                         Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
                         Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at City " + city + " and state " + state);
                         tvTitle.setText("   " + temp.get(i).user + " has checked in at " + city + ", " + state);
+                    }
+                    else{
+                        tvTitle.setText("Geocoder error occurred. This may be a connectivity or a GPS issue. Please reload the application!");
                     }
 
 //                    Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
