@@ -122,22 +122,17 @@ public class ServerRequests {
 
             HttpClient client = new DefaultHttpClient(httpRequestParams);
             HttpPost post = new HttpPost(SERVER_ADDRESS + "Register.php");
+            Log.d("ADebugTag", "1Register Fail!!!!!!!!!!!!!!!!!!!!!!!!!: \n");
 
             try {
+                Log.d("2ADebugTag", "Register Fail!!!!!!!!!!!!!!!!!!!!!!!!!: \n" + dataToSend);
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
                 client.execute(post);
 
-
-                post.setEntity(new UrlEncodedFormEntity(dataToSend));
-                HttpResponse httpResponse = client.execute(post);
-
-
-
             } catch (Exception e) {
-                Log.d("ADebugTag", "Register Fail: \n");
+                Log.d("ADebugTag", "Register Fail!!!!!!!!!!!!!!!!!!!!!!!!!: \n");
                 e.printStackTrace();
             }
-
             return null;
         }
 

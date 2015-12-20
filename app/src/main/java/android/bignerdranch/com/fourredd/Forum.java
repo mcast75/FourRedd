@@ -1,10 +1,11 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * This program is designed to manage all the threads returned from the database in an ArrayList.
+ */
+
 import java.util.ArrayList;
 
-/**
- * Created by Mike on 12/1/15.
- */
 public class Forum {
 
     ArrayList<Thread> allThreads;

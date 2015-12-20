@@ -1,8 +1,9 @@
 package android.bignerdranch.com.fourredd;
 
 /**
- * Created by Mike on 12/3/15.
+ * This program contains the class definition for comments.
  */
+
 public class Comment {
 
     int like, commentID, threadID;

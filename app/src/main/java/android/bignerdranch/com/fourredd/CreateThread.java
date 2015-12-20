@@ -1,5 +1,10 @@
 package android.bignerdranch.com.fourredd;
 
+/*
+ * This program is used to create new threads. This program creates comments based on user input and then sends those comments into
+ * the database using ServerRequests.java.
+ */
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;

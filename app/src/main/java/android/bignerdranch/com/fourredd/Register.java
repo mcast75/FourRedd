@@ -38,7 +38,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         switch(v.getId()){
             case R.id.bRegister:
 
-                Log.d("Register", "Value: \n\n\n\n\n" + etName.getText().toString() + " " + etUsername.getText().toString() + " " + etPassword.getText().toString());
 
                 if ((etName.getText().toString() == "")|(etUsername.getText().toString() == "")|
                         (etPassword.getText().toString() == "")) {
@@ -48,13 +47,15 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
                 }else{
 
-                    Log.d("Register", "Value: \n\n\n\n\n" + etName.getText().toString() + " " + etUsername.getText().toString() + " " + etPassword.getText().toString());
+                    Log.d("222Register", "Value:" + etName.getText().toString() + " " + etUsername.getText().toString() + " " + etPassword.getText().toString());
                     String name = etName.getText().toString();
                     String userName = etUsername.getText().toString();
                     String password = etPassword.getText().toString();
 
 
                     User user = new User(name, userName, password);
+
+                    Log.d("333Register", "Value:" + user);
 
 
 

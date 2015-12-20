@@ -2,6 +2,7 @@ package android.bignerdranch.com.fourredd;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -136,14 +138,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 name.setText(mUserLocalStore.getLoggedInUser().name);
 
                 thread1.setText(temp.get(0).title);
-                threadLikes1.setText(temp.get(0).like+"");
+                thread1.setTextColor(Color.BLACK);
+                threadLikes1.setText(temp.get(0).like + "");
                 threadDislikes1.setText(temp.get(0).dislikes+"");
 
                 thread2.setText(temp.get(1).title);
-                threadLikes2.setText(temp.get(1).like+"");
+                thread2.setTextColor(Color.BLACK);
+                threadLikes2.setText(temp.get(1).like + "");
                 threadDislikes2.setText(temp.get(1).dislikes+"");
 
                 thread3.setText(temp.get(2).title);
+                thread3.setTextColor(Color.BLACK);
                 threadLikes3.setText(temp.get(2).like+"");
                 threadDislikes3.setText(temp.get(2).dislikes+"");
 
@@ -166,30 +171,65 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 String state = " ";
                 String known = " ";
 
+
                 TextView tvTitle1 = (TextView) findViewById(R.id.location1);
                 TextView tvTitle2 = (TextView) findViewById(R.id.location2);
                 TextView tvTitle3 = (TextView) findViewById(R.id.location3);
-                if (geocoder != null) {
-                    addresses = geocoder.getFromLocation(temp2.get(0).latitude, temp2.get(0).longitude, 1);
-                    city = addresses.get(0).getLocality();
-                    state = addresses.get(0).getAdminArea();
-                    known = addresses.get(0).getFeatureName();
-                    tvTitle1.setText("   " + temp2.get(0).user + " has checked in at " + city + ", " + state);
 
-                    if (temp2.size() >= 2) {
-                        addresses = geocoder.getFromLocation(temp2.get(1).latitude, temp2.get(1).longitude, 1);
+                if (geocoder != null) {
+
+                    addresses = geocoder.getFromLocation(temp2.get(0).latitude, temp2.get(0).longitude, 1);
+
+                    if (addresses == null || addresses.size()  == 0) {
+
+                        tvTitle1.setText(temp2.get(0).user + " has checked in at an unknown location ("  +(int) temp2.get(0).latitude + "," + (int) temp2.get(0).longitude+")");
+
+                    } else {
                         city = addresses.get(0).getLocality();
                         state = addresses.get(0).getAdminArea();
                         known = addresses.get(0).getFeatureName();
-                        tvTitle2.setText("   " + temp2.get(1).user + " has checked in at " + city + ", " + state);
+
+                        tvTitle1.setText(temp2.get(0).user + " has checked in at " + known + " in " + city + ", " + state);
+                    }
+
+                    tvTitle1.setTextColor(Color.BLACK);
+
+                    if (temp2.size() >= 2) {
+                        addresses = geocoder.getFromLocation(temp2.get(1).latitude, temp2.get(1).longitude, 1);
+
+                        if (addresses == null || addresses.size()  == 0) {
+
+                            tvTitle2.setText(temp2.get(1).user + " has checked in at an unknown location ("  +(int) temp2.get(1).latitude + "," + (int) temp2.get(1).longitude+")");
+
+                        } else {
+                            city = addresses.get(0).getLocality();
+                            state = addresses.get(0).getAdminArea();
+                            known = addresses.get(0).getFeatureName();
+
+                            tvTitle2.setText(temp2.get(1).user + " has checked in at " + known + " in " + city + ", " + state);
+                        }
+
+                        tvTitle2.setTextColor(Color.BLACK);
+
                     }
 
                     if (temp2.size() >= 3) {
                         addresses = geocoder.getFromLocation(temp2.get(2).latitude, temp2.get(2).longitude, 1);
-                        city = addresses.get(0).getLocality();
-                        state = addresses.get(0).getAdminArea();
-                        known = addresses.get(0).getFeatureName();
-                        tvTitle3.setText("   " + temp2.get(2).user + " has checked in at " + city + ", " + state);
+
+                        if (addresses == null || addresses.size()  == 0) {
+
+                            tvTitle3.setText(temp2.get(2).user + " has checked in at an unknown location ("  +(int) temp2.get(2).latitude + "," + (int) temp2.get(2).longitude+")");
+
+                        } else {
+                            city = addresses.get(0).getLocality();
+                            state = addresses.get(0).getAdminArea();
+                            known = addresses.get(0).getFeatureName();
+
+                            tvTitle3.setText(temp2.get(0).user + " has checked in at " + known + " in " + city + ", " + state);
+                        }
+
+                        tvTitle3.setTextColor(Color.BLACK);
+
                     }
                 }
 

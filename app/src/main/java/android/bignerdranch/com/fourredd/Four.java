@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.LocationListener;
+import android.location.GpsSatellite;
 import android.location.LocationManager;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,9 +59,6 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
     private GoogleMap mMap;
 
-    private double mLatitude = 41.7440468;
-    private double mLongitude = -72.6920349;
-
     LocationObject mLocationObject;
 
 
@@ -74,6 +73,10 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
     LocationForum mLocationForum;
 
+    double init_latitude;
+    double init_longitude;
+
+    String errorMessage = "";
 
 
 
@@ -138,12 +141,21 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
 //        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 //        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        double longitude = location.getLongitude();
+//        double latitude = location.getLatitude();
+//
+//        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
+
         getLocationForum(mLocationForum);
+        //Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + mLocationForum);
+        //Log.d("ADEBUGTAG", "ANDROID ONONONIONLBYUVLHFLBFILE:  \n" + "buibgortunbiorbnriobntroib");
+
 
 
 
 
     }
+
 
     @Override
     public void onClick(View v) {
@@ -152,19 +164,50 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
             case R.id.shareLoc:
 
                 LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                double latitude = mLatitude;
-                double longitude = mLongitude;
+//                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//
+//                LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-                final LatLng newLoc = new LatLng(latitude, longitude);
-                Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
-                add.setVisible(true);
-                add.setTitle("TESTS");
+                try{
+                    Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-                mLocationObject = new LocationObject(mUserLocalStore.getLoggedInUser().name, latitude, longitude);
+                    double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
 
-                makeLocation(mLocationObject);
+                    final LatLng newLoc = new LatLng(latitude, longitude);
+                    Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
+                    add.setVisible(true);
+                    add.setTitle(mUserLocalStore.getLoggedInUser().name);
 
-                startActivity(new Intent(this, Four.class));
+
+                    mLocationObject = new LocationObject(mUserLocalStore.getLoggedInUser().name, latitude, longitude);
+
+                    makeLocation(mLocationObject);
+
+                    startActivity(new Intent(this, Four.class));
+                }catch (SecurityException securityException){
+
+                    errorMessage = "Service Not Available - Unable To Get Current Location";
+                    Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                }
+
+//                double longitude = location.getLongitude();
+//                double latitude = location.getLatitude();
+//
+//                final LatLng newLoc = new LatLng(latitude, longitude);
+//                Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
+//                add.setVisible(true);
+//                add.setTitle(mUserLocalStore.getLoggedInUser().name);
+//
+//
+//                mLocationObject = new LocationObject(mUserLocalStore.getLoggedInUser().name, latitude, longitude);
+//
+//                makeLocation(mLocationObject);
+//
+//                startActivity(new Intent(this, Four.class));
+
 
                 break;
 
@@ -182,19 +225,45 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
     @Override
     public void onMapReady(GoogleMap map) {
+
+        double longitude;
+        double latitude;
+
         mMap = map;
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
-//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-//        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//        if (location != null) {
-//            double longitude = location.getLongitude();
-//            double latitude = location.getLatitude();
-        final LatLng newLoc = new LatLng(mLatitude, mLongitude);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLoc, 7));
-//        }
+        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        try{
+            Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if(location == null){
+
+                longitude = init_longitude;
+                latitude = init_latitude;
+
+            }else {
+
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+            }
+
+            final LatLng newLoc = new LatLng(latitude, longitude);
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLoc, 7));
+        }catch (SecurityException securityException){
+
+            errorMessage = "Service Not Available - Unable To Get Current Location";
+            Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+
+        }
+
+
+
+
 
         enableMyLocation();
     }
@@ -202,8 +271,11 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
-            mLatitude = location.getLatitude();
-            mLongitude = location.getLongitude();
+            //Log.d("ADEBUGTAG", "Start Map:  \n" + "Enters Location");
+            init_latitude = location.getLatitude();
+            //Log.d("ADEBUGTAG", "LATITUDE:  \n" + latitude);
+            init_longitude = location.getLongitude();
+            //Log.d("ADEBUGTAG", "Longitude:  \n" + longitude);
         }
     };
 
@@ -233,10 +305,10 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     public boolean onMyLocationButtonClick() {
         enableMyLocation();
         Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
         return false;
     }
-
-
 
 
     @Override
@@ -292,22 +364,18 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
             public void done(LocationForum returnedForum) throws IOException {
 
                 TableLayout table = (TableLayout) findViewById(R.id.table);
-                table.setPadding(0,20,0,0);
+                table.setPadding(0,15,0,0);
                 int i = 0;
                 temp = returnedForum.getAllLocations();
 
+
                 for (i = 0; i < temp.size(); i++) {
+
+
                     final LatLng newLoc = new LatLng(temp.get(i).latitude, temp.get(i).longitude);
                     Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
                     add.setVisible(true);
                     add.setTitle(temp.get(i).user);
-
-                    Geocoder geocoder;
-                    List<Address> addresses;
-                    geocoder = new Geocoder(mContext, Locale.getDefault());
-                    String city = " ";
-                    String state = " ";
-                    String known = " ";
 
                     TableRow row = new TableRow(mContext);
                     table.addView(row);
@@ -315,54 +383,97 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                     LinearLayout ll = new LinearLayout(mContext);
                     row.addView(ll);
 
+
                     ll.setOrientation(LinearLayout.VERTICAL);
                     ll.setPadding(0, 0, 0, 70);
 
                     LinearLayout ll2 = new LinearLayout(mContext);
                     ll.setPadding(0, 0, 0, 40);
                     ll.addView(ll2);
+
+
+                    ImageView pin = new ImageView(mContext);
+                    ll2.addView(pin);
+                    android.view.ViewGroup.LayoutParams layoutParams = pin.getLayoutParams();
+                    layoutParams.width = 30;
+                    layoutParams.height = 30;
+                    pin.setPadding(5,0,0,0);
+                    pin.setLayoutParams(layoutParams);
+                    pin.setImageResource(R.drawable.pin);
+
+
                     TextView tvTitle = new TextView(mContext);
 
-                    if (geocoder != null) {
+                    Geocoder geocoder;
+                    List<Address> addresses;
+                    geocoder = new Geocoder(mContext, Locale.getDefault());
+                    addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
+
+
+                    Context context = getApplicationContext();
+                    int duration = Toast.LENGTH_SHORT;
+
+
+                    try {
+
+                        geocoder = new Geocoder(mContext, Locale.getDefault());
                         addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
-                        city = addresses.get(0).getLocality();
-                        state = addresses.get(0).getAdminArea();
-                        known = addresses.get(0).getFeatureName();
+
+                    } catch (IOException ioException) {
+                        // Catch network or other I/O problems.
+                        errorMessage = "Geocoder Service Not Available";
+                        Toast toast = Toast.makeText(context, errorMessage, duration);
+                        toast.show();
+
+                    } catch (IllegalArgumentException illegalArgumentException) {
+                        // Catch invalid latitude or longitude values.
+                        errorMessage = "Invalid Latitude and Longitude";
+                        Toast toast = Toast.makeText(context, errorMessage, duration);
+                        toast.show();
+
+                    }
+
+
+                    if (addresses == null || addresses.size() == 0) {
+
+                        tvTitle.setText("   " + temp.get(i).user + " has checked in at an unknown location (" + (int) temp.get(i).latitude + "," + (int) temp.get(i).longitude + ")");
+
+                    } else {
+                        String city = addresses.get(0).getLocality();
+                        String state = addresses.get(0).getAdminArea();
+                        String known = addresses.get(0).getFeatureName();
+                        tvTitle.setText("   " + temp.get(i).user + " has checked in at " + known + " in " + city + ", " + state);
                         Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
-                        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at City " + city + " and state " + state);
-                        tvTitle.setText("   " + temp.get(i).user + " has checked in at " + city + ", " + state);
-                    }
-                    else{
-                        tvTitle.setText("Geocoder error occurred. This may be a connectivity or a GPS issue. Please reload the application!");
+
+
                     }
 
-//                    Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
-
-                    tvTitle.setTextColor(Color.BLACK);
-                    tvTitle.setTextSize(24);
-                    ll2.addView(tvTitle);
-                    TextView line = new TextView(mContext);
-                    line.setTextSize(2);
-                    line.setTextColor(Color.BLACK);
-                    line.setText("_____________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "_______________________________________________________________________" +
-                            "______________________________________________________________________");
 
 
-                    ll.addView(line);
+                        tvTitle.setTextColor(Color.BLACK);
+                        tvTitle.setTextSize(24);
+                        ll2.addView(tvTitle);
+                        TextView line = new TextView(mContext);
+                        line.setTextSize(2);
+                        line.setTextColor(Color.BLACK);
+                        line.setText("_____________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "_______________________________________________________________________" +
+                                "______________________________________________________________________");
+
+
+                        ll.addView(line);
 
 
                 }
             }
-
 
         });
     }

@@ -1,5 +1,10 @@
 package android.bignerdranch.com.fourredd;
 
+/*
+ * This program makes a server request to load all the comments on a thread and then displays those threads.
+ * This program also allows users to like or dislike threads and stores those values in the database.
+ */
+
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;

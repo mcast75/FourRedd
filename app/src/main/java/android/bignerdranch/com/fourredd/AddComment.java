@@ -1,5 +1,9 @@
 package android.bignerdranch.com.fourredd;
 
+/*
+ * This program is used to add comments to threads. This program creates comments based on user input and then sends those comments into
+ * the database using ServerRequests.java.
+ */
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -66,6 +70,10 @@ public class AddComment extends AppCompatActivity implements View.OnClickListene
 
             case R.id.bLogout2:
                 startActivity(new Intent(this, Login.class));
+                break;
+
+            case R.id.cancelComment:
+                startActivity(new Intent(this, Comments.class));
                 break;
 
         }
