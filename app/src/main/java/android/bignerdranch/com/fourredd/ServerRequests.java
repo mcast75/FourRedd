@@ -322,7 +322,7 @@ public class ServerRequests {
 
 
 
-                        Log.d("ADebugTag", "AHHHHHHHH!!!!!!!!!!!!!!: \n" + tempThread.title);
+//                        Log.d("ADebugTag", "AHHHHHHHH!!!!!!!!!!!!!!: \n" + tempThread.title);
                         returnedForum.addThread(tempThread);
 
 
@@ -400,7 +400,7 @@ public class ServerRequests {
                         tempObject.latitude = object.getDouble("latitude");
                         tempObject.longitude = object.getDouble("longitude");
 
-                        Log.d("ADebugTag", "AHHHHHHHH!!!!!!!!!!!!!!: \n" + tempObject.user);
+//                        Log.d("ADebugTag", "AHHHHHHHH!!!!!!!!!!!!!!: \n" + tempObject.user);
                         returnedForum.addLocation(tempObject);
 
 

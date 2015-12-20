@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,6 +56,9 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private Marker mMarker;
 
     private GoogleMap mMap;
+
+    private double mLatitude = 41.7440468;
+    private double mLongitude = -72.6920349;
 
     LocationObject mLocationObject;
 
@@ -132,23 +136,14 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     public void onStart(){
         super.onStart();
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
-
-        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
-
+//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         getLocationForum(mLocationForum);
-        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + mLocationForum);
-        Log.d("ADEBUGTAG", "ANDROID ONONONIONLBYUVLHFLBFILE:  \n" + "buibgortunbiorbnriobntroib");
-
 
 
 
 
     }
-
 
     @Override
     public void onClick(View v) {
@@ -157,22 +152,19 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
             case R.id.shareLoc:
 
                 LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                double longitude = location.getLongitude();
-                double latitude = location.getLatitude();
+                double latitude = mLatitude;
+                double longitude = mLongitude;
 
                 final LatLng newLoc = new LatLng(latitude, longitude);
                 Marker add = mMap.addMarker(new MarkerOptions().position(newLoc).draggable(false));
                 add.setVisible(true);
-                add.setTitle("Penis");
-
+                add.setTitle("TESTS");
 
                 mLocationObject = new LocationObject(mUserLocalStore.getLoggedInUser().name, latitude, longitude);
 
                 makeLocation(mLocationObject);
 
                 startActivity(new Intent(this, Four.class));
-
 
                 break;
 
@@ -195,15 +187,14 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
-        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
-
-        final LatLng newLoc = new LatLng(latitude, longitude);
-
+//        LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        if (location != null) {
+//            double longitude = location.getLongitude();
+//            double latitude = location.getLatitude();
+        final LatLng newLoc = new LatLng(mLatitude, mLongitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLoc, 7));
-
+//        }
 
         enableMyLocation();
     }
@@ -211,11 +202,11 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
-            Log.d("ADEBUGTAG", "Start Map:  \n" + "Enters Location");
-            double latitude = location.getLatitude();
-            Log.d("ADEBUGTAG", "LATITUDE:  \n" + latitude);
-            double longitude = location.getLongitude();
-            Log.d("ADEBUGTAG", "Longitude:  \n" + longitude);
+//            Log.d("ADEBUGTAG", "Start Map:  \n" + "Enters Location");
+            mLatitude = location.getLatitude();
+//            Log.d("ADEBUGTAG", "LATITUDE:  \n" + mLatitude);
+            mLongitude = location.getLongitude();
+//            Log.d("ADEBUGTAG", "Longitude:  \n" + mLongitude);
         }
     };
 
@@ -249,6 +240,8 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
         // (the camera animates to the user's current position).
         return false;
     }
+
+
 
 
     @Override
@@ -320,10 +313,9 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                     Geocoder geocoder;
                     List<Address> addresses;
                     geocoder = new Geocoder(mContext, Locale.getDefault());
-                    addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
-                    String city = addresses.get(0).getLocality();
-                    String state = addresses.get(0).getAdminArea();
-                    String known = addresses.get(0).getFeatureName();
+                    String city = " ";
+                    String state = " ";
+                    String known = " ";
 
 
                     TableRow row = new TableRow(mContext);
@@ -342,9 +334,17 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                     ll.addView(ll2);
                     TextView tvTitle = new TextView(mContext);
 
-                    tvTitle.setText("   " + temp.get(i).user + " has checked in at " + city + ", " + state);
+                    if (geocoder != null) {
+                        addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
+                        city = addresses.get(0).getLocality();
+                        state = addresses.get(0).getAdminArea();
+                        known = addresses.get(0).getFeatureName();
+                        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
+                        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at City " + city + " and state " + state);
+                        tvTitle.setText("   " + temp.get(i).user + " has checked in at " + city + ", " + state);
+                    }
 
-                    Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
+//                    Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
 
                     tvTitle.setTextColor(Color.BLACK);
                     tvTitle.setTextSize(24);
