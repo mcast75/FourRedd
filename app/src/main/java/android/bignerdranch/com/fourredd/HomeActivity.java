@@ -1,23 +1,36 @@
 package android.bignerdranch.com.fourredd;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button bFour, bRedd, bLogout;
     UserLocalStore mUserLocalStore;
     ArrayList<Thread> temp;
+    ArrayList<LocationObject> temp2;
+    Context mContext;
     TextView name, thread1, thread2, thread3, threadLikes1, threadLikes2, threadLikes3, threadDislikes1, threadDislikes2, threadDislikes3;
     Forum mForum;
+    LocationForum mLocationForum;
 
 
     @Override
@@ -53,6 +66,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         mUserLocalStore = new UserLocalStore(this);
         mForum = new Forum();
+        mLocationForum = new LocationForum();
+        mContext = this;
     }
 
     @Override
@@ -105,12 +120,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onStart(){
         super.onStart();
 
-        getForum(mForum);
+        getForum(mForum, mLocationForum);
 
     }
 
 
-    private void getForum(Forum forum) {
+    private void getForum(Forum forum, LocationForum locationForum) {
         ServerRequests serverRequests = new ServerRequests((this));
         serverRequests.fetchForumInBackground(forum, new GetForumCallback() {
             @Override
@@ -135,6 +150,50 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
 
 
+        });
+
+        ServerRequests serverRequests2 = new ServerRequests((this));
+        serverRequests2.fetchLocationForumInBackground(locationForum, new GetLocationForumCallback() {
+            @Override
+            public void done(LocationForum returnedForum) throws IOException {
+
+                temp2 = returnedForum.getAllLocations();
+
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(mContext, Locale.getDefault());
+                String city = " ";
+                String state = " ";
+                String known = " ";
+
+                TextView tvTitle1 = (TextView) findViewById(R.id.location1);
+                TextView tvTitle2 = (TextView) findViewById(R.id.location2);
+                TextView tvTitle3 = (TextView) findViewById(R.id.location3);
+                if (geocoder != null) {
+                    addresses = geocoder.getFromLocation(temp2.get(0).latitude, temp2.get(0).longitude, 1);
+                    city = addresses.get(0).getLocality();
+                    state = addresses.get(0).getAdminArea();
+                    known = addresses.get(0).getFeatureName();
+                    tvTitle1.setText("   " + temp2.get(0).user + " has checked in at " + city + ", " + state);
+
+                    if (temp2.size() >= 2) {
+                        addresses = geocoder.getFromLocation(temp2.get(1).latitude, temp2.get(1).longitude, 1);
+                        city = addresses.get(0).getLocality();
+                        state = addresses.get(0).getAdminArea();
+                        known = addresses.get(0).getFeatureName();
+                        tvTitle2.setText("   " + temp2.get(1).user + " has checked in at " + city + ", " + state);
+                    }
+
+                    if (temp2.size() >= 3) {
+                        addresses = geocoder.getFromLocation(temp2.get(2).latitude, temp2.get(2).longitude, 1);
+                        city = addresses.get(0).getLocality();
+                        state = addresses.get(0).getAdminArea();
+                        known = addresses.get(0).getFeatureName();
+                        tvTitle3.setText("   " + temp2.get(2).user + " has checked in at " + city + ", " + state);
+                    }
+                }
+
+            }
         });
     }
 }
