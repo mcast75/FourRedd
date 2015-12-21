@@ -268,7 +268,7 @@ public class Comments extends AppCompatActivity implements View.OnClickListener 
                 ll3.addView(comments);
 
                 TextView tvNumLike = new TextView(mContext);
-                tvNumLike.setText("                      (Original Post) ");
+                tvNumLike.setText("    (Original Post) ");
                 tvNumLike.setTextSize(20);
                 ll3.addView(tvNumLike);
                 ll.addView(line);

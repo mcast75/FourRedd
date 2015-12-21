@@ -178,7 +178,6 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                     table.addView(row);
                     row.setId(i);
                     row.setClickable(true);
-                    Log.d("ADebugTag", "LOG ID!!!!!!!!!!!!!!: \n" + row.getId());
                     LinearLayout ll = new LinearLayout(mContext);
                     row.addView(ll);
                     row.setOnClickListener(Redd.this);

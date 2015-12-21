@@ -78,7 +78,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     double init_latitude;
     double init_longitude;
 
-    String errorMessage = "Geocoder Is Online";
+    String errorMessage = "";
 
 
 
@@ -149,8 +149,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 //        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
 
         getLocationForum(mLocationForum);
-        Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
-        toast.show();
+
 
         //Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + mLocationForum);
         //Log.d("ADEBUGTAG", "ANDROID ONONONIONLBYUVLHFLBFILE:  \n" + "buibgortunbiorbnriobntroib");
@@ -420,7 +419,6 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
                         geocoder = new Geocoder(mContext, Locale.getDefault());
                         addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
-                        errorMessage = "Geocoder Is Online";
 
                     } catch (IOException ioException) {
                         // Catch network or other I/O problems.
@@ -440,6 +438,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                         tvTitle.setText("   " + temp.get(i).user + " has checked in at an unknown location (" + (int) temp.get(i).latitude + "," + (int) temp.get(i).longitude + ")");
 
                     } else {
+                        errorMessage = "Geocoder Is Online";
                         String city = addresses.get(0).getLocality();
                         String state = addresses.get(0).getAdminArea();
                         String known = addresses.get(0).getFeatureName();
@@ -480,6 +479,9 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
 
                 }
+
+                Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                toast.show();
             }
 
         });

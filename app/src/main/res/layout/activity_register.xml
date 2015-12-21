@@ -2,10 +2,28 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_height="match_parent"
-              android:padding="10dp"
               android:layout_width="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_bright">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="45dp"
+            android:text="  Register A New User! "
+            android:gravity="center_vertical"/>
+
+
+
+    </LinearLayout>
+
     <TextView
+        android:padding="10dp"
         android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,6 +32,8 @@
         android:textSize="30dp"/>
 
     <EditText
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:id="@+id/etName"
         android:textSize="30dp"
         android:layout_width="match_parent"
@@ -23,6 +43,7 @@
 
 
     <TextView
+        android:padding="10dp"
         android:textSize="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +51,8 @@
         android:textColor="@android:color/black"/>
 
     <EditText
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:textSize="30dp"
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
@@ -38,6 +61,7 @@
         android:textColor="@android:color/black"/>
 
     <TextView
+        android:padding="10dp"
         android:textSize="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,6 +69,8 @@
         android:textColor="@android:color/black"/>
 
     <EditText
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:id="@+id/etPassword"
         android:textSize="30dp"
         android:inputType="textPassword"
@@ -53,6 +79,7 @@
         android:textColor="@android:color/black"/>
 
     <LinearLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -62,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:textSize="30dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="35dp"
             android:textColor="@android:color/black"/>
 
 

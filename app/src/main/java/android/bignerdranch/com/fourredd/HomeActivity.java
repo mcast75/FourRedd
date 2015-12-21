@@ -38,7 +38,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     TextView name, thread1, thread2, thread3, threadLikes1, threadLikes2, threadLikes3, threadDislikes1, threadDislikes2, threadDislikes3;
     Forum mForum;
     LocationForum mLocationForum;
-    String errorMessage = "Geocoder Is Online";
+    String errorMessage;
 
 
     @Override
@@ -76,6 +76,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mForum = new Forum();
         mLocationForum = new LocationForum();
         mContext = this;
+
+        errorMessage = "";
     }
 
     @Override
@@ -130,8 +132,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         getForum(mForum, mLocationForum);
 
-        Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
-        toast.show();
 
 
     }
@@ -150,17 +150,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 thread1.setText(temp.get(0).title);
                 thread1.setTextColor(Color.BLACK);
                 threadLikes1.setText(temp.get(0).like + "");
-                threadDislikes1.setText(temp.get(0).dislikes+"");
+                threadDislikes1.setText(temp.get(0).dislikes + "");
 
                 thread2.setText(temp.get(1).title);
                 thread2.setTextColor(Color.BLACK);
                 threadLikes2.setText(temp.get(1).like + "");
-                threadDislikes2.setText(temp.get(1).dislikes+"");
+                threadDislikes2.setText(temp.get(1).dislikes + "");
 
                 thread3.setText(temp.get(2).title);
                 thread3.setTextColor(Color.BLACK);
-                threadLikes3.setText(temp.get(2).like+"");
-                threadDislikes3.setText(temp.get(2).dislikes+"");
+                threadLikes3.setText(temp.get(2).like + "");
+                threadDislikes3.setText(temp.get(2).dislikes + "");
 
             }
 
@@ -187,16 +187,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 TextView tvTitle3 = (TextView) findViewById(R.id.location3);
 
 
-
+                Log.d("ADebugTag", "Outside try!!!!!!!!!!!!!!: \n\n" + errorMessage + "\n");
                 try {
 
                     geocoder = new Geocoder(mContext, Locale.getDefault());
                     addresses = geocoder.getFromLocation(temp2.get(0).latitude, temp2.get(0).longitude, 1);
-                    errorMessage = "Geocoder Is Online";
+
 
                 } catch (IOException ioException) {
                     // Catch network or other I/O problems.
                     errorMessage = "Geocoder Service Not Available";
+                    Log.d("ADebugTag", "InsideException!!!!!!!!!!!!!!: \n\n" + errorMessage + "\n");
 
 
                 } catch (IllegalArgumentException illegalArgumentException) {
@@ -208,10 +209,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
 
-                if (addresses == null || addresses.size()  == 0) {
+                if (addresses == null || addresses.size() == 0) {
 
-                    tvTitle1.setText(temp2.get(0).user + " has checked in at an unknown location ("  +(int) temp2.get(0).latitude + "," + (int) temp2.get(0).longitude+")");
+                    tvTitle1.setText(temp2.get(0).user + " has checked in at an unknown location (" + (int) temp2.get(0).latitude + "," + (int) temp2.get(0).longitude + ")");
                 } else {
+                    errorMessage = "Geocoder Is Online";
+                    Log.d("ADebugTag", "Inside else !!!!!!!!!!!!!!: \n\n" + errorMessage + "\n");
                     city = addresses.get(0).getLocality();
                     state = addresses.get(0).getAdminArea();
                     known = addresses.get(0).getFeatureName();
@@ -220,12 +223,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 tvTitle1.setTextColor(Color.BLACK);
 
 
-
                 try {
 
                     geocoder = new Geocoder(mContext, Locale.getDefault());
                     addresses = geocoder.getFromLocation(temp2.get(1).latitude, temp2.get(1).longitude, 1);
-                    errorMessage = "Geocoder Is Online";
+
 
                 } catch (IOException ioException) {
                     // Catch network or other I/O problems.
@@ -241,10 +243,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
 
-                if (addresses == null || addresses.size()  == 0) {
+                if (addresses == null || addresses.size() == 0) {
 
-                    tvTitle2.setText(temp2.get(1).user + " has checked in at an unknown location ("  +(int) temp2.get(1).latitude + "," + (int) temp2.get(1).longitude+")");
+                    tvTitle2.setText(temp2.get(1).user + " has checked in at an unknown location (" + (int) temp2.get(1).latitude + "," + (int) temp2.get(1).longitude + ")");
                 } else {
+                    errorMessage = "Geocoder Is Online";
                     city = addresses.get(0).getLocality();
                     state = addresses.get(0).getAdminArea();
                     known = addresses.get(0).getFeatureName();
@@ -253,13 +256,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 tvTitle2.setTextColor(Color.BLACK);
 
 
-
-
                 try {
 
                     geocoder = new Geocoder(mContext, Locale.getDefault());
                     addresses = geocoder.getFromLocation(temp2.get(2).latitude, temp2.get(2).longitude, 1);
-                    errorMessage = "Geocoder Is Online";
 
                 } catch (IOException ioException) {
                     // Catch network or other I/O problems.
@@ -275,10 +275,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
 
-                if (addresses == null || addresses.size()  == 0) {
+                if (addresses == null || addresses.size() == 0) {
 
-                    tvTitle3.setText(temp2.get(2).user + " has checked in at an unknown location ("  +(int) temp2.get(2).latitude + "," + (int) temp2.get(0).longitude+")");
+                    tvTitle3.setText(temp2.get(2).user + " has checked in at an unknown location (" + (int) temp2.get(2).latitude + "," + (int) temp2.get(0).longitude + ")");
                 } else {
+                    errorMessage = "Geocoder Is Online";
                     city = addresses.get(0).getLocality();
                     state = addresses.get(0).getAdminArea();
                     known = addresses.get(0).getFeatureName();
@@ -286,12 +287,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 tvTitle3.setTextColor(Color.BLACK);
 
-
+                Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                toast.show();
 
             }
 
-
-
         });
+
     }
 }

@@ -2,10 +2,30 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_height="match_parent"
-              android:padding="10dp"
               android:layout_width="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_bright">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="45dp"
+            android:text="  Welcome to FourRedd! "
+            android:gravity="center_vertical"/>
+
+
+
+    </LinearLayout>
+
+
     <TextView
+        android:padding="10dp"
+
         android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,6 +34,8 @@
         android:text="Username"/>
 
     <EditText
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:textSize="25dp"
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
@@ -22,6 +44,7 @@
         android:layout_marginBottom="10dp"/>
 
     <TextView
+        android:padding="10dp"
         android:layout_marginTop="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +53,8 @@
         android:text="Password"/>
 
     <EditText
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
         android:textSize="25dp"
         android:textColor="@android:color/black"
         android:id="@+id/etPassword"
@@ -39,6 +64,7 @@
         android:layout_marginBottom="10dp"/>
 
     <Button
+
         android:layout_marginTop="50dp"
         android:id="@+id/bLoginSuc"
         android:text="Login"
@@ -50,6 +76,7 @@
 
 
     <LinearLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp">
