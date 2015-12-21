@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -185,6 +186,13 @@ public class Redd extends AppCompatActivity implements View.OnClickListener {
                     ll.addView(ll2);
                     TextView tvTitle = new TextView(mContext);
                     tvTitle.setText(temp.get(i).title);
+
+                    Point size2 = new Point();
+                    getWindowManager().getDefaultDisplay().getSize(size2);
+                    int width2 = size2.x;
+                    tvTitle.setLayoutParams(new LinearLayout.LayoutParams(width2 - 10
+                            , ViewGroup.LayoutParams.WRAP_CONTENT));
+
                     tvTitle.setTextColor(Color.BLACK);
                     tvTitle.setTextSize(24);
                     ll2.addView(tvTitle);
