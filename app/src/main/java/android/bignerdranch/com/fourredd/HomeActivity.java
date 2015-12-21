@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -37,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     TextView name, thread1, thread2, thread3, threadLikes1, threadLikes2, threadLikes3, threadDislikes1, threadDislikes2, threadDislikes3;
     Forum mForum;
     LocationForum mLocationForum;
+    String errorMessage = "Geocoder Is Online";
 
 
     @Override
@@ -128,6 +130,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         getForum(mForum, mLocationForum);
 
+        Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+        toast.show();
+
+
     }
 
 
@@ -169,8 +175,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 temp2 = returnedForum.getAllLocations();
 
                 Geocoder geocoder;
-                List<Address> addresses;
-                geocoder = new Geocoder(mContext, Locale.getDefault());
+                List<Address> addresses = new ArrayList<Address>();
+
                 String city = " ";
                 String state = " ";
                 String known = " ";
@@ -180,64 +186,112 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 TextView tvTitle2 = (TextView) findViewById(R.id.location2);
                 TextView tvTitle3 = (TextView) findViewById(R.id.location3);
 
-                if (geocoder != null) {
 
+
+                try {
+
+                    geocoder = new Geocoder(mContext, Locale.getDefault());
                     addresses = geocoder.getFromLocation(temp2.get(0).latitude, temp2.get(0).longitude, 1);
+                    errorMessage = "Geocoder Is Online";
 
-                    if (addresses == null || addresses.size()  == 0) {
+                } catch (IOException ioException) {
+                    // Catch network or other I/O problems.
+                    errorMessage = "Geocoder Service Not Available";
 
-                        tvTitle1.setText(temp2.get(0).user + " has checked in at an unknown location ("  +(int) temp2.get(0).latitude + "," + (int) temp2.get(0).longitude+")");
 
-                    } else {
-                        city = addresses.get(0).getLocality();
-                        state = addresses.get(0).getAdminArea();
-                        known = addresses.get(0).getFeatureName();
+                } catch (IllegalArgumentException illegalArgumentException) {
+                    // Catch invalid latitude or longitude values.
+                    errorMessage = "Invalid Latitude and Longitude";
+                    Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                    toast.show();
 
-                        tvTitle1.setText(temp2.get(0).user + " has checked in at " + known + " in " + city + ", " + state);
-                    }
-
-                    tvTitle1.setTextColor(Color.BLACK);
-
-                    if (temp2.size() >= 2) {
-                        addresses = geocoder.getFromLocation(temp2.get(1).latitude, temp2.get(1).longitude, 1);
-
-                        if (addresses == null || addresses.size()  == 0) {
-
-                            tvTitle2.setText(temp2.get(1).user + " has checked in at an unknown location ("  +(int) temp2.get(1).latitude + "," + (int) temp2.get(1).longitude+")");
-
-                        } else {
-                            city = addresses.get(0).getLocality();
-                            state = addresses.get(0).getAdminArea();
-                            known = addresses.get(0).getFeatureName();
-
-                            tvTitle2.setText(temp2.get(1).user + " has checked in at " + known + " in " + city + ", " + state);
-                        }
-
-                        tvTitle2.setTextColor(Color.BLACK);
-
-                    }
-
-                    if (temp2.size() >= 3) {
-                        addresses = geocoder.getFromLocation(temp2.get(2).latitude, temp2.get(2).longitude, 1);
-
-                        if (addresses == null || addresses.size()  == 0) {
-
-                            tvTitle3.setText(temp2.get(2).user + " has checked in at an unknown location ("  +(int) temp2.get(2).latitude + "," + (int) temp2.get(2).longitude+")");
-
-                        } else {
-                            city = addresses.get(0).getLocality();
-                            state = addresses.get(0).getAdminArea();
-                            known = addresses.get(0).getFeatureName();
-
-                            tvTitle3.setText(temp2.get(0).user + " has checked in at " + known + " in " + city + ", " + state);
-                        }
-
-                        tvTitle3.setTextColor(Color.BLACK);
-
-                    }
                 }
 
+
+                if (addresses == null || addresses.size()  == 0) {
+
+                    tvTitle1.setText(temp2.get(0).user + " has checked in at an unknown location ("  +(int) temp2.get(0).latitude + "," + (int) temp2.get(0).longitude+")");
+                } else {
+                    city = addresses.get(0).getLocality();
+                    state = addresses.get(0).getAdminArea();
+                    known = addresses.get(0).getFeatureName();
+                    tvTitle1.setText(temp2.get(0).user + " has checked in at " + known + " in " + city + ", " + state);
+                }
+                tvTitle1.setTextColor(Color.BLACK);
+
+
+
+                try {
+
+                    geocoder = new Geocoder(mContext, Locale.getDefault());
+                    addresses = geocoder.getFromLocation(temp2.get(1).latitude, temp2.get(1).longitude, 1);
+                    errorMessage = "Geocoder Is Online";
+
+                } catch (IOException ioException) {
+                    // Catch network or other I/O problems.
+                    errorMessage = "Geocoder Service Not Available";
+
+
+                } catch (IllegalArgumentException illegalArgumentException) {
+                    // Catch invalid latitude or longitude values.
+                    errorMessage = "Invalid Latitude and Longitude";
+                    Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                }
+
+
+                if (addresses == null || addresses.size()  == 0) {
+
+                    tvTitle2.setText(temp2.get(1).user + " has checked in at an unknown location ("  +(int) temp2.get(1).latitude + "," + (int) temp2.get(1).longitude+")");
+                } else {
+                    city = addresses.get(0).getLocality();
+                    state = addresses.get(0).getAdminArea();
+                    known = addresses.get(0).getFeatureName();
+                    tvTitle2.setText(temp2.get(1).user + " has checked in at " + known + " in " + city + ", " + state);
+                }
+                tvTitle2.setTextColor(Color.BLACK);
+
+
+
+
+                try {
+
+                    geocoder = new Geocoder(mContext, Locale.getDefault());
+                    addresses = geocoder.getFromLocation(temp2.get(2).latitude, temp2.get(2).longitude, 1);
+                    errorMessage = "Geocoder Is Online";
+
+                } catch (IOException ioException) {
+                    // Catch network or other I/O problems.
+                    errorMessage = "Geocoder Service Not Available";
+
+
+                } catch (IllegalArgumentException illegalArgumentException) {
+                    // Catch invalid latitude or longitude values.
+                    errorMessage = "Invalid Latitude and Longitude";
+                    Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                    toast.show();
+
+                }
+
+
+                if (addresses == null || addresses.size()  == 0) {
+
+                    tvTitle3.setText(temp2.get(2).user + " has checked in at an unknown location ("  +(int) temp2.get(2).latitude + "," + (int) temp2.get(0).longitude+")");
+                } else {
+                    city = addresses.get(0).getLocality();
+                    state = addresses.get(0).getAdminArea();
+                    known = addresses.get(0).getFeatureName();
+                    tvTitle3.setText(temp2.get(2).user + " has checked in at " + known + " in " + city + ", " + state);
+                }
+                tvTitle3.setTextColor(Color.BLACK);
+
+
+
             }
+
+
+
         });
     }
 }

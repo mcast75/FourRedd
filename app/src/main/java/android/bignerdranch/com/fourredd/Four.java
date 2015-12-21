@@ -78,7 +78,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
     double init_latitude;
     double init_longitude;
 
-    String errorMessage = "";
+    String errorMessage = "Geocoder Is Online";
 
 
 
@@ -149,6 +149,9 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 //        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + longitude + " - LONGITUDE   " + latitude + " - LATITUDE");
 
         getLocationForum(mLocationForum);
+        Toast toast = Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+        toast.show();
+
         //Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + mLocationForum);
         //Log.d("ADEBUGTAG", "ANDROID ONONONIONLBYUVLHFLBFILE:  \n" + "buibgortunbiorbnriobntroib");
 
@@ -407,10 +410,7 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                     TextView tvTitle = new TextView(mContext);
 
                     Geocoder geocoder;
-                    List<Address> addresses;
-                    geocoder = new Geocoder(mContext, Locale.getDefault());
-                    addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
-
+                    List<Address> addresses = new ArrayList<Address>();
 
                     Context context = getApplicationContext();
                     int duration = Toast.LENGTH_SHORT;
@@ -420,12 +420,11 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
                         geocoder = new Geocoder(mContext, Locale.getDefault());
                         addresses = geocoder.getFromLocation(temp.get(i).latitude, temp.get(i).longitude, 1);
+                        errorMessage = "Geocoder Is Online";
 
                     } catch (IOException ioException) {
                         // Catch network or other I/O problems.
                         errorMessage = "Geocoder Service Not Available";
-                        Toast toast = Toast.makeText(context, errorMessage, duration);
-                        toast.show();
 
                     } catch (IllegalArgumentException illegalArgumentException) {
                         // Catch invalid latitude or longitude values.
