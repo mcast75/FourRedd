@@ -1,6 +1,10 @@
 package android.bignerdranch.com.fourredd;
 
 /**
+ * Creates new thread object
+ */
+
+/**
  * Created by Mike on 11/24/15.
  */
 public class Thread {

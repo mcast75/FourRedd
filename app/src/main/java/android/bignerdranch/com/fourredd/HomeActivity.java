@@ -1,5 +1,9 @@
 package android.bignerdranch.com.fourredd;
-
+/**
+ * Displays the users name and has a logout button
+ * Uses server request to pull the three most recent threads and locations from the data base
+ * Has buttons which start the Redd and Four activities
+ */
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;

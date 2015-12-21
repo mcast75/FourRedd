@@ -1,6 +1,10 @@
 package android.bignerdranch.com.fourredd;
 
 /**
+ * creates a new user object
+ */
+
+/**
  * Created by Mike on 11/8/15.
  */
 public class User {

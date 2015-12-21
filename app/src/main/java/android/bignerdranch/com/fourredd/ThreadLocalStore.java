@@ -1,5 +1,9 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * Stores the current thread information
+ */
+
 import android.content.Context;
 import android.content.SharedPreferences;
 

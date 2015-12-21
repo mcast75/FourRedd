@@ -1,5 +1,8 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * Parses through the return from the server request
+ */
 
 import android.util.Log;
 

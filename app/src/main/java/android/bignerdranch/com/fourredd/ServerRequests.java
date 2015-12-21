@@ -1,5 +1,9 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * Allows the app to communicate with the database set up at hostinger.uk.co
+ */
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -125,9 +129,9 @@ public class ServerRequests {
             Log.d("ADebugTag", "1Register Fail!!!!!!!!!!!!!!!!!!!!!!!!!: \n");
 
             try {
-                Log.d("2ADebugTag", "Register Fail!!!!!!!!!!!!!!!!!!!!!!!!!: \n" + dataToSend);
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
                 client.execute(post);
+
 
             } catch (Exception e) {
                 Log.d("ADebugTag", "Register Fail!!!!!!!!!!!!!!!!!!!!!!!!!: \n");
@@ -136,6 +140,26 @@ public class ServerRequests {
             return null;
         }
 
+//        try {
+//            post.setEntity(new UrlEncodedFormEntity(dataToSend));
+//
+//            HttpResponse httpResponse = client.execute(post);
+//
+//            HttpEntity entity = httpResponse.getEntity();
+//            String result = EntityUtils.toString(entity);
+//
+//
+//
+////                Log.d("ADebugTag", "Value: Thread!!!!!!!!!!!!!!!!!!!!!!! \n\n\n" + result);
+//            JSONObject jsonObject = new JSONObject(result);
+//
+////                Log.d("Register", "ValueJSON: \n\n\n\n\n" + result);
+//
+//
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         @Override
         protected void onPostExecute(Void aVoid){

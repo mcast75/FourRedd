@@ -1,5 +1,9 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * Initializes a location object for use in the four activity
+ */
+
 import java.sql.Timestamp;
 
 /**

@@ -1,5 +1,9 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * stores current user object
+ */
+
 import android.content.Context;
 import android.content.SharedPreferences;
 

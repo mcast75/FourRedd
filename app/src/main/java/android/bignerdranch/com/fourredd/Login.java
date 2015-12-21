@@ -1,5 +1,11 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * Allows user to enter username and password to login to the app
+ * Uses server request to pull login info and match it against inputted data
+ * Moves user to the home acitivty if the information provided is correct
+ * Has an option to register a new user account
+ */
 
 import android.app.AlertDialog;
 import android.content.Intent;

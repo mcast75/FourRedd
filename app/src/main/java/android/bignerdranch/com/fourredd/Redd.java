@@ -1,5 +1,11 @@
 package android.bignerdranch.com.fourredd;
 
+/**
+ * Allows users view and post threads as well as like or dislike threads
+ * Buttons allow the user to navigate to either the create new thread activity or view the comments for a specific thread
+ * Buttons to navigate to the four and home activites are present
+ * server requests pulls the threads and orders them by how recently they were created
+ */
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
