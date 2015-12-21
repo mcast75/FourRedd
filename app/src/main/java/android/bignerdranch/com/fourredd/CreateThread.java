@@ -23,11 +23,14 @@ public class CreateThread extends AppCompatActivity implements View.OnClickListe
     EditText threadPost, threadTitle;
     TextView makeThread, cancelThread;
     UserLocalStore mUserLocalStore;
+    Button logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_thread);
+
+        logout = (Button) findViewById(R.id.bLogout2);
 
         threadPost = (EditText) findViewById(R.id.threadPost);
         threadTitle = (EditText) findViewById(R.id.threadTitle);
@@ -37,6 +40,7 @@ public class CreateThread extends AppCompatActivity implements View.OnClickListe
 
         makeThread.setOnClickListener(this);
         cancelThread.setOnClickListener(this);
+        logout.setOnClickListener(this);
 
         mUserLocalStore = new UserLocalStore(this);
 
