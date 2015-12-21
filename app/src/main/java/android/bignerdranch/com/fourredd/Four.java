@@ -75,8 +75,8 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
 
     LocationForum mLocationForum;
 
-    double init_latitude;
-    double init_longitude;
+    double init_latitude = 41.747078;
+    double init_longitude = -72.69256;
 
     String errorMessage = "";
 
