@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.GpsSatellite;
@@ -15,6 +16,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -443,10 +445,16 @@ public class Four extends AppCompatActivity implements View.OnClickListener, OnM
                         String state = addresses.get(0).getAdminArea();
                         String known = addresses.get(0).getFeatureName();
                         tvTitle.setText("   " + temp.get(i).user + " has checked in at " + known + " in " + city + ", " + state);
-                        Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
+                        //Log.d("ADEBUGTAG", "ANDROID LOCATION:  \n" + temp.get(i).user + " has checked in at Latitude " + (int) temp.get(i).latitude + " and Longitude " + (int) temp.get(i).longitude);
 
 
                     }
+
+                    Point size2 = new Point();
+                    getWindowManager().getDefaultDisplay().getSize(size2);
+                    int width2 = size2.x;
+                    tvTitle.setLayoutParams(new LinearLayout.LayoutParams(width2 - 10
+                            , ViewGroup.LayoutParams.WRAP_CONTENT));
 
 
 
